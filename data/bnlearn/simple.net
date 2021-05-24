@@ -1,0 +1,28 @@
+net 
+{
+  simple 
+}
+node X1 
+{
+  states = ( "x11" "x12" );
+}
+node X2 
+{
+  states = ( "x21" "x22" );
+}
+node X3 
+{
+  states = ( "x31" "x32" );
+}
+potential ( X2 ) 
+{
+  data = ( 0.2 0.8 );
+}
+potential ( X3 ) 
+{
+  data = ( 0.7 0.3 );
+}
+potential ( X1 | X2 X3 ) 
+{
+data = (((0.1 0.9)(0.2 0.8))((0.3 0.7)(0.4 0.6))) ;
+}

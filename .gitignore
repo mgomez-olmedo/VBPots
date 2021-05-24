@@ -1,2 +1,17 @@
+# ignore analysis folder
+analysis
+
+# ignore idea configuration folder
+.idea/*
+target/*
+project/*
+lib_managed/*
+classes/*
+
+# ignore specific files
 *.class
 *.log
+*.out
+nohup*
+.DS_Store
+
