@@ -1,4 +1,4 @@
-package experiments.ijisExperiments
+package experiments.ijisExperiments.memorySizes
 
 import experiments.{BnetAnalysis, ExperimentConfiguration}
 import potential.ValueStoreTypes
@@ -13,12 +13,9 @@ object BnlearnMemorySizes extends App{
       ValueStoreTypes.TABLE,
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
-      //ValueStoreTypes.MAPSETGRAIN,
       ValueStoreTypes.VDGLIST,
-      ValueStoreTypes.VDILISTIMMUT,
-      //ValueStoreTypes.MAPSETINDICESIMMUT,
+      ValueStoreTypes.VDILISTMUT,
       ValueStoreTypes.IDPMUT,
-      // ValueStoreTypes.IDSETIMMUT,
       ValueStoreTypes.IDMMUT)
 
    // sets the list of nets to examine

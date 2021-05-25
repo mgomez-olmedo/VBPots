@@ -1,4 +1,4 @@
-package experiments.ijisExperiments
+package experiments.ijisExperiments.memorySizes
 
 import experiments.{BnetAnalysis, ExperimentConfiguration}
 import potential.ValueStoreTypes
