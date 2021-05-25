@@ -1,8 +1,10 @@
 package experiments.access
 
 import bnet.Bnet
-import org.scalameter._
+import experiments.serializeNets.SerializeNets
+import org.scalameter.{Bench, Key, Measurer, Warmer, config, withMeasurer}
 import potential.ValueStoreTypes
+import utils.Util
 
 import java.io.{File, PrintWriter}
 import scala.collection.mutable.HashMap
@@ -51,10 +53,9 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
     * @param folder
     * @param numberConfigurations
     */
-   def singleAnalysis(netname : String, extension : String,
-                      numberConfigurations : Long) = {
+   def singleAnalysis(netname : String, numberConfigurations : Long) = {
       println("starting analysis of net " + netname)
-      analyzeNet(netname, extension, numberConfigurations)
+      analyzeNet(netname, numberConfigurations)
       println("ended analysis of net")
    }
 
@@ -107,11 +108,15 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
     * Analyzes the access to a certain network and a given
     * number of configurations
     */
-   def analyzeNet(netName : String, extension : String,
-                  numberConfigurations : Long) = {
+   def analyzeNet(fileName : String, numberConfigurations : Long) = {
+      // separate base name and extension for filename
+      val elements = Util.separateExtension(fileName)
+      val netName = elements._1
+      val extension = elements._2
+
       // read bnet file and makes Bnet object
-      println("staring analysis of net: " + netName)
-      val bnet = Bnet(netName + "." + extension)
+      println("starting analysis of net: " + netName)
+      val bnet = Bnet(fileName)
 
       // store the number of configurations used for testing
       numberIndexes += ((netName, numberConfigurations))
@@ -137,7 +142,7 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
             "." + extension
 
          // convert the bnet to the desired representation
-         val convertedNet = Bnet.readObject(filename)
+         val convertedNet = SerializeNets.readSerializedNet(fileName, representation)
 
          println("starting with " + representation.toString)
          // try the list of access
@@ -261,7 +266,7 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
          }
       }
       println(" numberConfigurations: " + numberConfigurations)
-      singleAnalysis(args(0), extension, numberConfigurations)
+      singleAnalysis(args(0)+extension, numberConfigurations)
    }
    //println(composeLineForNet(args(0) + extension))
 }

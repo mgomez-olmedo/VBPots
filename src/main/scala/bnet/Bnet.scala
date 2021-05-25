@@ -193,6 +193,7 @@ object Bnet {
    def apply(netName: String): Bnet = {
       // gets the extension from netName
       val extension = netName.split("\\.").last
+      println("extension: " + extension)
 
       // determine the folder
       val folder = getFolder(extension)
@@ -263,14 +264,8 @@ object Bnet {
     * @return object with the information taken from the file
     */
    def readObject(fileName: String): Bnet = {
-      // gets the extension
-      val extension = fileName.split("\\.").last
-
-      // gets the folder
-      val folder = getFolder(extension)
-
       // read the object
-      Serializator.readObject[Bnet](folder + fileName)
+      Serializator.readObject[Bnet](fileName)
    }
 
    /**

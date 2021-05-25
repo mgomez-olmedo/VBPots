@@ -12,5 +12,5 @@ These objects are directly executable and are configured for producing the resul
 
 ## Experiments for access times
 
-The experiments are described in sections 6.3.1 and 6.3.2 and the results presented in Figures 12 and 13. 
+The experiments for access times are described in sections 6.3.1 and 6.3.2 and the corresponding results presented in Figures 12 and 13. 
 

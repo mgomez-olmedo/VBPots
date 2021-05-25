@@ -129,6 +129,25 @@ object Util{
    }
 
    /**
+    * separates the components from a file name
+    * @param filename
+    * @return
+    */
+   def separateExtension(filename : String) = {
+      // split using .
+      val elements = filename.split("\\.")
+
+      // gets basename
+      val basename = elements.head
+
+      // gets the extension from netName
+      val extension = elements.last
+
+      // return the tuple
+      (basename, extension)
+   }
+
+   /**
     * makes triples from two lists of values. The content of triplet is
     * a) product of val1*val2
     * b) val1 (coming from list1)
