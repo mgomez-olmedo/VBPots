@@ -193,7 +193,6 @@ object Bnet {
    def apply(netName: String): Bnet = {
       // gets the extension from netName
       val extension = netName.split("\\.").last
-      println("extension: " + extension)
 
       // determine the folder
       val folder = getFolder(extension)

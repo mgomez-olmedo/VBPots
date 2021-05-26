@@ -31,8 +31,8 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
 
    // defines the configuration for benchmarking
    val standardConfig = config(
-      //Key.exec.minWarmupRuns -> 5,
-      //Key.exec.maxWarmupRuns -> 20,
+      Key.exec.minWarmupRuns -> 5,
+      Key.exec.maxWarmupRuns -> 20,
       Key.exec.benchRuns -> 20,
       //Key.exec.reinstantiation.frequency -> 2,
       //Key.exec.outliers.covMultiplier -> 1.5,
@@ -54,9 +54,7 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
     * @param numberConfigurations
     */
    def singleAnalysis(netname : String, numberConfigurations : Long) = {
-      println("starting analysis of net " + netname)
       analyzeNet(netname, numberConfigurations)
-      println("ended analysis of net")
    }
 
    /**
@@ -68,7 +66,6 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
    def prepareAccessSet(bnet: Bnet, counter : Long ) : List[(Int, Long)] = {
       // for each configuration select a potential at random
       // and the corresponding index to access
-      Random.setSeed(0L)
       val accessSet: List[(Int, Long)] = (0L until counter).map(index => {
          // gets the index of the potential to access
          val indexPotential = Random.nextInt(bnet.potentials.size)
@@ -115,7 +112,6 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
       val extension = elements._2
 
       // read bnet file and makes Bnet object
-      println("starting analysis of net: " + netName)
       val bnet = Bnet(fileName)
 
       // store the number of configurations used for testing
@@ -124,10 +120,8 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
       // prepare access set
       val accessSet = prepareAccessSet(bnet, numberConfigurations)
 
-      println("starting with TABLE representation")
       // compute access time
       var time = measureTime(bnet, accessSet)
-      println("TABLE time: " + time)
 
       // creates the store for the net name
       val timesNet = HashMap[ValueStoreTypes.Value, Double]()
@@ -137,17 +131,14 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
 
       // measure the time for the rest of representations
       representations.foreach(representation => {
-         println("reading serialized object " + representation.toString)
          val filename = netName + "-obj-" + representation.toString +
             "." + extension
 
          // convert the bnet to the desired representation
          val convertedNet = SerializeNets.readSerializedNet(fileName, representation)
 
-         println("starting with " + representation.toString)
          // try the list of access
          time = measureTime(convertedNet, accessSet)
-         println(representation.toString + " time: " + time)
 
          // store into the map
          timesNet += ((representation, time))
@@ -160,8 +151,6 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
       representations.foreach(representation => {
          val timerep = timesNet.get(representation).get
          val saving = (timerep * 100.0 / timeTable) - 100
-         println("perc for " + representation.toString + " = " + saving +
-            " timerep: " + timerep + " timeTable: " + timeTable)
       })
 
       // store timesNet into times

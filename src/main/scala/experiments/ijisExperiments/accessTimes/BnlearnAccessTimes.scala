@@ -29,5 +29,9 @@ object BnlearnAccessTimes extends App{
   // shows the header with information about types of interest
   val reps = "net & " + IndexAccessBnetSelectBenchmark.representations.mkString(" & ")
   println(reps)
-  IndexAccessBnetSelectBenchmark.singleAnalysis("barley.net", numberConfigurations)
+  nets.foreach(net => {
+    (0 until 10).foreach(index => {
+       IndexAccessBnetSelectBenchmark.singleAnalysis(net, numberConfigurations)
+    })
+  })
 }

@@ -41,9 +41,11 @@ case class IDMMStore(variables: VariableSet,
     * @return value corresponding to index
     */
    def  getValue(index: Long): Double = {
-      val indexInValue: Long =indices.getOrElse(index, -1L)
+      val indexInValue: Long = indices.getOrElse(index, -1L)
       if(indexInValue == -1L) Util.DEFAULTVALUE
       else values(indexInValue.toInt)
+      //if(!indices.contains(index)) Util.DEFAULTVALUE
+      //else indices.get(index).get
    }
 
    /**
