@@ -7,7 +7,7 @@ import experiments.serializeNets.SerializeNets
  * Object for generating the results for access times experiment
  * for Bnlearn networks
  */
-object BnlearnAccessTimes extends App{
+object BnlearnAccessTimes extends App {
   // selected representations are already fixed in class IndexAccessBnetSelectBenchmark
 
   // sets the list of nets to examine
@@ -24,14 +24,10 @@ object BnlearnAccessTimes extends App{
   // makes serialization if needed. This makes computation time for the
   // experiment shorter when serialized versions of networks are available
   nets.foreach(net => SerializeNets.serializeNet(net,
-                                        IndexAccessBnetSelectBenchmark.representations))
+    IndexAccessBnetSelectBenchmark.representations))
 
   // shows the header with information about types of interest
-  val reps = "net & " + IndexAccessBnetSelectBenchmark.representations.mkString(" & ")
+  val reps = "net & " + "TABLE  & " + IndexAccessBnetSelectBenchmark.representations.mkString(" & ")
   println(reps)
-  nets.foreach(net => {
-    (0 until 10).foreach(index => {
-       IndexAccessBnetSelectBenchmark.singleAnalysis(net, numberConfigurations)
-    })
-  })
+  IndexAccessBnetSelectBenchmark.singleAnalysis("alarm.net", numberConfigurations)
 }

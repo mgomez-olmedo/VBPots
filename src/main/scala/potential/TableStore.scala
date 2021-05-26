@@ -11,7 +11,6 @@ import utils.{DataSizes, Util}
 case class TableStore(override val variables : VariableSet,
                       values:Array[Double]) extends ValueStore with
                      Combiner with Marginalizer {
-
    /**
     * defines the kind of store
     */
@@ -30,6 +29,7 @@ case class TableStore(override val variables : VariableSet,
      * @return corresponding value
      */
    override def getValue(index: Long): Double = {
+      TableStore.addGetValueCalls
       values(index.toInt)
    }
 
@@ -126,6 +126,14 @@ case class TableStore(override val variables : VariableSet,
   * Companion object for TableStore
   */
 object TableStore extends Combiner with Marginalizer{
+   var getValueCalls = 0
+
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
+
    /**
      * Apply method acting as factory method
      * @param variables variables for the potential

@@ -1,6 +1,7 @@
 package potential.tree
 
 import base.{Configuration, Variable, VariableSet}
+import potential.TreeStore
 import utils.{DataSizes, Util}
 
 /**
@@ -308,7 +309,7 @@ object TreeNode {
     */
    def getValue(tree: TreeNode, variables: VariableSet,
                 index: Long): Double = {
-
+      TreeStore.addGetValueCalls
       // creates a configuration for variables
       val configuration = Configuration(variables)
 

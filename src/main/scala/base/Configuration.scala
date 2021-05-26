@@ -1,5 +1,6 @@
 package base
 
+import potential.TreeStore
 import utils.DataSizes
 
 /**
@@ -73,6 +74,7 @@ class Configuration(val domain:VariableSet,
      * @return
      */
    def getVariableValue(variable: Variable, index: Long) : Int = {
+      TreeStore.addGetValueCalls
       // get the index of the variable
       val indexOfVar: Int = domain.getIndex(variable)
 

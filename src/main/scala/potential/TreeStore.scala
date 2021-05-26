@@ -31,6 +31,7 @@ case class TreeStore(variables: VariableSet,
     * @return value stored in the corresponding index
     */
    override def getValue(index: Long): Double = {
+      TreeStore.addGetValueCalls
       TreeNode.getValue(root, variables, index)
    }
 
@@ -148,6 +149,14 @@ case class TreeStore(variables: VariableSet,
  * Companion object
  */
 object TreeStore extends Combiner with Marginalizer {
+   var getValueCalls = 0
+
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
+
    /**
     * Constructor
     *

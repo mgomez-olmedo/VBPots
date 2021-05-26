@@ -1,8 +1,9 @@
 package experiments.access
 
 import bnet.Bnet
+import experiments.serializeNets.SerializeNets
 import org.scalameter._
-import potential.ValueStoreTypes
+import potential.{TableStore, TreeStore, ValueStoreTypes}
 
 import scala.util.Random
 
@@ -23,9 +24,9 @@ object IndexAccessBnetRepSelectBenchmark extends Bench.ForkedTime {
 
    // defines the configuration for benchmarking
    val standardConfig = config(
-      //Key.exec.minWarmupRuns -> 5,
-      //Key.exec.maxWarmupRuns -> 20,
-      Key.exec.benchRuns -> 20,
+      Key.exec.minWarmupRuns -> 10,
+      Key.exec.maxWarmupRuns -> 50,
+      Key.exec.benchRuns -> 50,
       //Key.exec.reinstantiation.frequency -> 2,
       //Key.exec.outliers.covMultiplier -> 1.5,
       //Key.exec.outliers.suspectPercent -> 40,
@@ -93,38 +94,42 @@ object IndexAccessBnetRepSelectBenchmark extends Bench.ForkedTime {
 
       // compose file with serialized version and read the
       // corresponding object
-      val filename = netName + "-obj-" + representation.toString +
-           "." + extension
-
-      // convert the bnet to the desired representation
-      val bnet = Bnet.readObject(filename)
+      // val bnet = Bnet.readObject(filename)
+      val bnet = SerializeNets.readSerializedNet(netName + "." + extension, representation)
 
       // prepare access set
       val accessSet = prepareAccessSet(bnet, numberConfigurations)
 
       // compute access time
       var time = measureTime(bnet, accessSet)
-      println(time)
+      println("\n" + time)
    }
 
    // call batch method of analysis
    //batchAnalysis(folder, extension)
    //generatePaperLatexTable
    override def main(args : Array[String]) = {
-      val extension = args(1)
+      //val extension = args(1)
+      val extension = "net"
+      val netName = "alarm"
 
       // retrieve the kind of representation to test
-      val selectedRep = representations.filter(rep => rep.toString == args(2))
+      // val selectedRep = representations.filter(rep => rep.toString == args(2))
+      val selectedRep = ValueStoreTypes.TABLE
 
       // checks if this if a valid representation
-      if(selectedRep.length == 0){
-         println("Error in representation selection")
-         System.exit(-1)
-      }
+      //if(selectedRep.length == 0){
+      //   println("Error in representation selection")
+      //   System.exit(-1)
+      //}
 
       // keeps on processing
       var numberConfigurations : Long = 10000L
-      analyzeNet(args(0), extension, selectedRep(0), numberConfigurations)
+      //analyzeNet(args(0), extension, selectedRep(0), numberConfigurations)
+      analyzeNet(netName, extension, selectedRep, numberConfigurations)
+
+      //println("Calls: " + TableStore.getGetValueCalls)
+      println("Calls: " + TableStore.getGetValueCalls)
    }
    //println(composeLineForNet(args(0) + extension))
 }

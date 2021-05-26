@@ -31,8 +31,8 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
 
    // defines the configuration for benchmarking
    val standardConfig = config(
-      Key.exec.minWarmupRuns -> 5,
-      Key.exec.maxWarmupRuns -> 20,
+      //Key.exec.minWarmupRuns -> 5,
+      //Key.exec.maxWarmupRuns -> 20,
       Key.exec.benchRuns -> 20,
       //Key.exec.reinstantiation.frequency -> 2,
       //Key.exec.outliers.covMultiplier -> 1.5,
