@@ -53,8 +53,8 @@ class CombinationTest extends FunSuite {
    println(resultTable)
 
    // convert potential to ArrayIMStore, ArraySIMStore, MapLIMStore
-   val store1: Potential = potential1Table.convert(ValueStoreTypes.IDPMUT)
-   val store2 = potential2Table.convert(ValueStoreTypes.IDPMUT)
+   val store1: Potential = potential1Table.convert(ValueStoreTypes.IDPMSTORE)
+   val store2 = potential2Table.convert(ValueStoreTypes.IDPMSTORE)
 
    // sets the list of combiners and marginalizers to use
    // for ArraIMStore
@@ -86,8 +86,8 @@ class CombinationTest extends FunSuite {
                      OperatorType.ALT3, OperatorType.ALT4)
    marginalizers = List(OperatorType.DEFAULT)
 
-   val store3 = potential1Table.convert(ValueStoreTypes.IDSETMUT)
-   val store4 = potential2Table.convert(ValueStoreTypes.IDSETMUT)
+   val store3 = potential1Table.convert(ValueStoreTypes.IDSMSTORE)
+   val store4 = potential2Table.convert(ValueStoreTypes.IDSMSTORE)
 
    // test all the combinations of operators on ArraSIMStore
    for(comb <- combiners; marg <- marginalizers){
@@ -113,8 +113,8 @@ class CombinationTest extends FunSuite {
       OperatorType.ALT3, OperatorType.ALT4)
    marginalizers = List(OperatorType.DEFAULT)
 
-   val store5 = potential1Table.convert(ValueStoreTypes.VDILISTMUT)
-   val store6 = potential2Table.convert(ValueStoreTypes.VDILISTMUT)
+   val store5 = potential1Table.convert(ValueStoreTypes.VDILMSTORE)
+   val store6 = potential2Table.convert(ValueStoreTypes.VDILMSTORE)
 
    // test all the combinations of operators on ArraSIMStore
    for(comb <- combiners; marg <- marginalizers){

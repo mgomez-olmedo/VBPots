@@ -46,7 +46,7 @@ class MarginalizationTest extends FunSuite {
    println(resultTable)
 
    // convert potential to ArrayIMStore
-   val store1: Potential = potential1Table.convert(ValueStoreTypes.IDPMUT)
+   val store1: Potential = potential1Table.convert(ValueStoreTypes.IDPMSTORE)
 
    // sets the list of combiners and marginalizers to use
    var marginalizers = List(OperatorType.DEFAULT,
@@ -78,7 +78,7 @@ class MarginalizationTest extends FunSuite {
       OperatorType.ALT2)
 
    // convert potential to ArraySIMStore
-   val store2: Potential = potential1Table.convert(ValueStoreTypes.IDSETMUT)
+   val store2: Potential = potential1Table.convert(ValueStoreTypes.IDSMSTORE)
 
    // test all the marginalization methods
    for(marg <- marginalizers){
@@ -100,7 +100,7 @@ class MarginalizationTest extends FunSuite {
    }
 
    // convert potential to ArraySIMStore
-   val store3: Potential = potential1Table.convert(ValueStoreTypes.VDILISTMUT)
+   val store3: Potential = potential1Table.convert(ValueStoreTypes.VDILMSTORE)
 
    // test all the marginalization methods
    for(marg <- marginalizers){

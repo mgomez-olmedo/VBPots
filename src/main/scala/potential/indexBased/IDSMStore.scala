@@ -37,6 +37,8 @@ case class IDSMStore(variables: VariableSet,
     * @return value for index
     */
    def getValue(index: Long): Double = {
+      IDSMStore.addGetValueCalls
+
       // find the index in the sets
       val indexResult = indexesSet.indices.
          find(indexInArray => indexesSet(indexInArray).
@@ -296,6 +298,13 @@ case class IDSMStore(variables: VariableSet,
  * Companion object offering factory methods
  */
 object IDSMStore extends Combiner with Marginalizer {
+   var getValueCalls = 0
+
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
 
    /**
     * Factory method

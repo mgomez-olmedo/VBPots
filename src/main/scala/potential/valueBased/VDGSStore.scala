@@ -25,7 +25,7 @@ case class VDGSStore(variables: VariableSet,
    /**
     * kind of storage
     */
-   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDGSET
+   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDGSSTORE
 
    /**
     * Return the list of variables
@@ -41,6 +41,8 @@ case class VDGSStore(variables: VariableSet,
     * @return value
     */
    override def getValue(index: Long): Double = {
+      VDGSStore.addGetValueCalls
+
       // find the index in the map
       val entry = map.find(entry => {
          entry._2.findIndex(index) != null
@@ -289,6 +291,14 @@ case class VDGSStore(variables: VariableSet,
  * Companion object acting as factory
  */
 object VDGSStore extends Combiner with Marginalizer{
+   var getValueCalls = 0
+
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
+
    /**
     * Factory method
     *

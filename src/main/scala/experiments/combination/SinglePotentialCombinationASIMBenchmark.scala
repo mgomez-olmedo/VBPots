@@ -65,8 +65,8 @@ object SinglePotentialCombinationASIMBenchmark extends App{
    println("Time tree: " + timeTree)
 
    // now convert to ASIM store
-   val pot1ASIM = potential1.convert(ValueStoreTypes.IDSETMUT)
-   val pot2ASIM = potential2.convert(ValueStoreTypes.IDSETMUT)
+   val pot1ASIM = potential1.convert(ValueStoreTypes.IDSMSTORE)
+   val pot2ASIM = potential2.convert(ValueStoreTypes.IDSMSTORE)
 
    // set functions to def - def
    pot1ASIM.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)

@@ -76,7 +76,7 @@ class ConversionTest extends FunSuite {
 
    // test grain set conversion representation
    test("set of grain conversion "){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDGSET)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDGSSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -106,7 +106,7 @@ class ConversionTest extends FunSuite {
 
    // test grain set conversion representation
    test("set of grain conversion 0D"){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDGSET)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDGSSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -136,7 +136,7 @@ class ConversionTest extends FunSuite {
 
    // test grain list conversion representation
    test("list of grain conversion "){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDGLIST)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDGLSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -166,7 +166,7 @@ class ConversionTest extends FunSuite {
 
    // test grain list conversion representation
    test("list of grain conversion 0D"){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDGLIST)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDGLSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -256,7 +256,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("list of indices (mutable) conversion "){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDILISTMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDILMSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -286,7 +286,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("list of indices (mutable) conversion 0D"){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDILISTMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDILMSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -316,7 +316,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("array of indices (immutable) conversion "){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDPIMMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDPISTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -346,7 +346,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("array of indices (immutable) conversion 0D"){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDPIMMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDPISTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -376,7 +376,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("array of indices (mutable) conversion "){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDPMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDPMSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -406,7 +406,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("array of indices (mutable) conversion 0D"){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDPMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDPMSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -436,7 +436,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("set of indices (immutable) conversion "){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDSETIMMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDSISTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -466,7 +466,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("set of indices (immutable) conversion 0D"){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDSETIMMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDSISTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -496,7 +496,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("set of indices (mutable) conversion "){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDSETMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDSMSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -526,7 +526,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("set of indices (mutable) conversion 0D"){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDSETMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.IDSMSTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {

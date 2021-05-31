@@ -16,10 +16,10 @@ object VariableEliminationBenchmarkNets extends Bench.ForkedTime {
       ValueStoreTypes.TREE,
       //ValueStoreTypes.PRUNEDTREE,
       //ValueStoreTypes.MAPLISTGRAIN,
-      ValueStoreTypes.VDILISTMUT,
+      ValueStoreTypes.VDILMSTORE,
       //ValueStoreTypes.ARRAYINDICESIMMUT,
-      ValueStoreTypes.IDSETMUT,
-      ValueStoreTypes.IDMMUT)
+      ValueStoreTypes.IDSMSTORE,
+      ValueStoreTypes.IDMMSTORE)
 
    // defines a data structure for storing the result for
    // each net and data structure

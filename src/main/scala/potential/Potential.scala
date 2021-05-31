@@ -306,27 +306,27 @@ object Potential {
             TreeStore(variableSet, valuesList.toArray)
          case ValueStoreTypes.PRUNEDTREE =>
             PrunedTreeStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.VDGLIST =>
+         case ValueStoreTypes.VDGLSTORE =>
             VDGLStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.VDGSET =>
+         case ValueStoreTypes.VDGSSTORE =>
             VDGSStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.IDMMUT =>
+         case ValueStoreTypes.IDMMSTORE =>
             IDMMStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.IDSETIMMUT =>
+         case ValueStoreTypes.IDSISTORE =>
             IDSIStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.IDSETMUT =>
+         case ValueStoreTypes.IDSMSTORE =>
             IDSMStore(variableSet, valuesList.toArray)
          case ValueStoreTypes.VDILISTIMMUT =>
             VDILIStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.VDILISTMUT =>
+         case ValueStoreTypes.VDILMSTORE =>
             VDILMStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.VDISETIMMUT =>
+         case ValueStoreTypes.VDISISTORE =>
             VDISIStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.VDISETMUT =>
+         case ValueStoreTypes.VDISMSTORE =>
             VDISMStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.IDPIMMUT =>
+         case ValueStoreTypes.IDPISTORE =>
             IDPIStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.IDPMUT =>
+         case ValueStoreTypes.IDPMSTORE =>
             IDPMStore(variableSet, valuesList.toArray)
       }
 

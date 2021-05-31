@@ -19,10 +19,10 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
    val representations = List(
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
-      ValueStoreTypes.VDGLIST,
-      ValueStoreTypes.VDILISTMUT,
-      ValueStoreTypes.IDPMUT,
-      ValueStoreTypes.IDMMUT)
+      ValueStoreTypes.VDGLSTORE,
+      ValueStoreTypes.VDILMSTORE,
+      ValueStoreTypes.IDPMSTORE,
+      ValueStoreTypes.IDMMSTORE)
 
    // defines a data structure for storing the result for
    // each net and data structure

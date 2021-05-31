@@ -60,7 +60,7 @@ object VEMLIMOptSelect extends App{
      map(bnet.variables.getVariable(_).name).mkString(" "))
 
    // creates a engine for tree
-   val convertedBnet = Bnet.convert(bnet, ValueStoreTypes.VDILISTMUT)
+   val convertedBnet = Bnet.convert(bnet, ValueStoreTypes.VDILMSTORE)
    val engine = new VariableElimination(convertedBnet, false)
 
    // gets the number of alternatives for this representation

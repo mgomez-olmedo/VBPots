@@ -3,7 +3,8 @@ package experiments.access
 import bnet.Bnet
 import experiments.serializeNets.SerializeNets
 import org.scalameter._
-import potential.{TableStore, TreeStore, ValueStoreTypes}
+import potential.ValueStoreTypes
+import potential.indexBased.IDPMStore
 
 import scala.util.Random
 
@@ -17,10 +18,10 @@ object IndexAccessBnetRepSelectBenchmark extends Bench.ForkedTime {
       ValueStoreTypes.TABLE,
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
-      ValueStoreTypes.VDGLIST,
-      ValueStoreTypes.VDILISTMUT,
-      ValueStoreTypes.IDPMUT,
-      ValueStoreTypes.IDMMUT)
+      ValueStoreTypes.VDGLSTORE,
+      ValueStoreTypes.VDILMSTORE,
+      ValueStoreTypes.IDPMSTORE,
+      ValueStoreTypes.IDMMSTORE)
 
    // defines the configuration for benchmarking
    val standardConfig = config(
@@ -115,7 +116,7 @@ object IndexAccessBnetRepSelectBenchmark extends Bench.ForkedTime {
 
       // retrieve the kind of representation to test
       // val selectedRep = representations.filter(rep => rep.toString == args(2))
-      val selectedRep = ValueStoreTypes.TABLE
+      val selectedRep = ValueStoreTypes.IDPMSTORE
 
       // checks if this if a valid representation
       //if(selectedRep.length == 0){
@@ -124,12 +125,12 @@ object IndexAccessBnetRepSelectBenchmark extends Bench.ForkedTime {
       //}
 
       // keeps on processing
-      var numberConfigurations : Long = 10000L
+      var numberConfigurations : Long = 20000L
       //analyzeNet(args(0), extension, selectedRep(0), numberConfigurations)
       analyzeNet(netName, extension, selectedRep, numberConfigurations)
 
       //println("Calls: " + TableStore.getGetValueCalls)
-      println("Calls: " + TableStore.getGetValueCalls)
+      println("Calls: " + IDPMStore.getGetValueCalls)
    }
    //println(composeLineForNet(args(0) + extension))
 }

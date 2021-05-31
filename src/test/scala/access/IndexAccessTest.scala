@@ -11,10 +11,10 @@ import potential.{Potential, ValueStoreTypes}
 class IndexAccessTest extends FunSuite {
    // defines the representations to test (those used in IJIS paper)
    val representations = List(ValueStoreTypes.TABLE,
-      ValueStoreTypes.VDGLIST,
+      ValueStoreTypes.VDGLSTORE,
       ValueStoreTypes.VDILISTIMMUT,
-      ValueStoreTypes.IDPMUT,
-      ValueStoreTypes.IDMMUT)
+      ValueStoreTypes.IDPMSTORE,
+      ValueStoreTypes.IDMMSTORE)
 
    // sets a net for testing access methods
    val bnet: Bnet = Bnet("alarm.net")

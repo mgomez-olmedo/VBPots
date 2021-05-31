@@ -32,7 +32,7 @@ case class IDMMStore(variables: VariableSet,
     * sets the kind of store
     */
    override val kind: ValueStoreTypes.Value =
-               ValueStoreTypes.IDMMUT
+               ValueStoreTypes.IDMMSTORE
 
    /**
     * Gets the value for a corresponding index
@@ -41,6 +41,8 @@ case class IDMMStore(variables: VariableSet,
     * @return value corresponding to index
     */
    def  getValue(index: Long): Double = {
+      IDMMStore.addGetValueCalls
+
       val indexInValue: Long = indices.getOrElse(index, -1L)
       if(indexInValue == -1L) Util.DEFAULTVALUE
       else values(indexInValue.toInt)
@@ -335,20 +337,13 @@ case class IDMMStore(variables: VariableSet,
  * Companion object
  */
 object IDMMStore extends Combiner with Marginalizer {
-   /**
-    * counter of indices
-    */
-   private var indices: Double = 0
+   var getValueCalls = 0
 
-   /**
-    * counter of values
-    */
-   private var values: Double = 0
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
 
-   /**
-    * counter of objects
-    */
-   private var objects: Double = 0
+   def getGetValueCalls = getValueCalls
 
    /**
     * Factory method

@@ -13,10 +13,10 @@ object BnlearnMemorySizes extends App{
       ValueStoreTypes.TABLE,
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
-      ValueStoreTypes.VDGLIST,
-      ValueStoreTypes.VDILISTMUT,
-      ValueStoreTypes.IDPMUT,
-      ValueStoreTypes.IDMMUT)
+      ValueStoreTypes.VDGLSTORE,
+      ValueStoreTypes.VDILMSTORE,
+      ValueStoreTypes.IDPMSTORE,
+      ValueStoreTypes.IDMMSTORE)
 
    // sets the list of nets to examine
    val nets = List("cancer.net", "asia.net", "survey.net", "sachs.net",

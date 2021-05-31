@@ -24,7 +24,7 @@ object CheckVariableEliminationTableTreeAIM extends App{
    val engineTree = new VariableElimination(bnetTree, false)
 
    // creates engine for Array Indices
-   val bnetAI = Bnet.convert(bnet, ValueStoreTypes.IDPMUT)
+   val bnetAI = Bnet.convert(bnet, ValueStoreTypes.IDPMSTORE)
    val engineAIMutable = new VariableElimination(bnetAI, false)
 
    // propagates with tables and show results

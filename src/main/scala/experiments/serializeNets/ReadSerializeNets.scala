@@ -23,11 +23,11 @@ object ReadSerializeNets extends App{
   val representations = List(
     ValueStoreTypes.TREE,
     ValueStoreTypes.PRUNEDTREE,
-    ValueStoreTypes.VDGLIST,
+    ValueStoreTypes.VDGLSTORE,
     ValueStoreTypes.VDILISTIMMUT,
-    ValueStoreTypes.IDPIMMUT,
-    ValueStoreTypes.IDSETIMMUT,
-    ValueStoreTypes.IDMMUT)
+    ValueStoreTypes.IDPISTORE,
+    ValueStoreTypes.IDSISTORE,
+    ValueStoreTypes.IDMMSTORE)
 
   // makes conversions and store files
   representations.foreach(representation => {

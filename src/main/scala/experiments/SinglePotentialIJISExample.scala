@@ -13,10 +13,10 @@ object SinglePotentialIJISExample extends App{
    val typesOfInteres = List(
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
-      ValueStoreTypes.VDGLIST, // VDG
+      ValueStoreTypes.VDGLSTORE, // VDG
       ValueStoreTypes.VDILISTIMMUT, // VDI
-      ValueStoreTypes.IDPIMMUT, // IDP
-      ValueStoreTypes.IDMMUT // IDM
+      ValueStoreTypes.IDPISTORE, // IDP
+      ValueStoreTypes.IDMMSTORE // IDM
    )
 
    // create object
@@ -33,7 +33,7 @@ object SinglePotentialIJISExample extends App{
    println(prunedTree)
 
    // convert into VDG
-   val vdg = example.potential.convert(ValueStoreTypes.VDGLIST)
+   val vdg = example.potential.convert(ValueStoreTypes.VDGLSTORE)
    val grainData = vdg.store.asInstanceOf[VDGLStore].getGrainsInfo
    println("info about grains: " + grainData)
    println(vdg)
@@ -43,10 +43,10 @@ object SinglePotentialIJISExample extends App{
    println(vdi)
 
    // convert into IPD
-   val idp = example.potential.convert(ValueStoreTypes.IDPIMMUT)
+   val idp = example.potential.convert(ValueStoreTypes.IDPISTORE)
    println(idp)
 
    // convert into IDM
-   val idm = example.potential.convert(ValueStoreTypes.IDMMUT)
+   val idm = example.potential.convert(ValueStoreTypes.IDMMSTORE)
    println(idm)
 }

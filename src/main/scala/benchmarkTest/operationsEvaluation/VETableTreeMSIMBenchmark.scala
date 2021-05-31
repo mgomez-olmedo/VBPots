@@ -34,7 +34,7 @@ object VETableTreeMSIMBenchmark extends App {
    val engineTree = new VariableElimination(bnetTree, false)
 
    // creates a engine for Map indices
-   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.VDISETMUT)
+   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.VDISISTORE)
    val engineMSIMutable = new VariableElimination(bnetMapIndices, false)
 
    // general test: propagation with CPT, PTs and msimut

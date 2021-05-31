@@ -34,7 +34,7 @@ object VEMISelectSingleEstimation extends App {
 
    // read bnet info
    println("reading bnet info " + netName+ " .............")
-   val filename = netName + "-obj-" + ValueStoreTypes.IDMMUT.toString +
+   val filename = netName + "-obj-" + ValueStoreTypes.IDMMSTORE.toString +
       "." + extension
 
    // convert the bnet to the desired representation

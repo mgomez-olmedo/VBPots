@@ -41,7 +41,7 @@ object VETableTreeAIMOfflineReportBenchmark extends Bench.OfflineReport {
    val engineTree = new VariableElimination(bnetTree, false)
 
    // creates a engine for Map indices
-   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.IDSETMUT)
+   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.IDSMSTORE)
    val engineAIMutable = new VariableElimination(bnetMapIndices, false)
 
    // defines the number of repetitions for each propagation

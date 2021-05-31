@@ -13,5 +13,7 @@ classes/*
 *.log
 *.out
 nohup*
+*.jar
+script*
 .DS_Store
 

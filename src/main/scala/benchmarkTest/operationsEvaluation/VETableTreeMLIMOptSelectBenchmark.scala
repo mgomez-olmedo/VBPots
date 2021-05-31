@@ -86,7 +86,7 @@ object VETableTreeMLIMOptSelectBenchmark extends App {
    println("tree time: " + time.value)
 
    // creates a engine for Map with list of indices
-   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.VDILISTMUT)
+   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.VDILMSTORE)
    engine = new VariableElimination(bnetMapIndices, false)
 
    // gets the number of alternatives for this representation

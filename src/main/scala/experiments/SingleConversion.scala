@@ -27,7 +27,7 @@ object SingleConversion extends App{
      * alternative representation
      */
    val alternativeBnet = Bnet.convert(bnet,
-      ValueStoreTypes.VDISETIMMUT)
+      ValueStoreTypes.VDISISTORE)
 
    /**
      * get potentials for variables

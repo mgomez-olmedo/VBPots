@@ -34,7 +34,7 @@ object VETableTreeMIBenchmark extends App {
    val engineTree = new VariableElimination(bnetTree, false)
 
    // creates a engine for Map indices
-   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.IDMMUT)
+   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.IDMMSTORE)
    val engineAIMutable = new VariableElimination(bnetMapIndices, false)
 
    // general test: propagation with CPT, PTs and AIMut

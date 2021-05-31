@@ -24,12 +24,12 @@ object ExperimentConfiguration{
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
       //ValueStoreTypes.MAPSETGRAIN,
-      ValueStoreTypes.VDGLIST,
+      ValueStoreTypes.VDGLSTORE,
       ValueStoreTypes.VDILISTIMMUT,
       //ValueStoreTypes.MAPSETINDICESIMMUT,
-      ValueStoreTypes.IDPIMMUT,
+      ValueStoreTypes.IDPISTORE,
       // ValueStoreTypes.IDSETIMMUT,
-      ValueStoreTypes.IDMMUT)
+      ValueStoreTypes.IDMMSTORE)
 }
 
 /**
@@ -401,14 +401,14 @@ class BnetAnalysis(val folder: String, val netName: String,
             resFile.print(nodes._1 + " " + nodes._2 + " ")
          }
          else{
-            if(storeType == ValueStoreTypes.VDGLIST){
+            if(storeType == ValueStoreTypes.VDGLSTORE){
                val potGrain = netInfo.net.getPotentialForVariable(potential.mainVariable)
                // get the number of grains
                val grains = potGrain.store.asInstanceOf[VDGLStore].getNumberGrains
                resFile.print(grains + " ")
             }
             else{
-               if(storeType == ValueStoreTypes.VDGSET){
+               if(storeType == ValueStoreTypes.VDGSSTORE){
                   val potGrain = netInfo.net.getPotentialForVariable(potential.mainVariable)
                   // get the number of grains
                   val grains = potGrain.store.asInstanceOf[VDGSStore].getNumberGrains
@@ -600,12 +600,12 @@ class BnetAnalysis(val folder: String, val netName: String,
       // compose the line for the first table with info
       // about CPTs, trees and pruned trees
       val representations = List(
-         ValueStoreTypes.VDGSET,
-         ValueStoreTypes.VDGLIST,
+         ValueStoreTypes.VDGSSTORE,
+         ValueStoreTypes.VDGLSTORE,
          ValueStoreTypes.VDILISTIMMUT,
-         ValueStoreTypes.VDISETIMMUT,
-         ValueStoreTypes.IDPIMMUT,
-         ValueStoreTypes.IDSETIMMUT)
+         ValueStoreTypes.VDISISTORE,
+         ValueStoreTypes.IDPISTORE,
+         ValueStoreTypes.IDSISTORE)
 
       // get global size for table representation
       val tableSize = bnetsInfo.get(ValueStoreTypes.TABLE).get.

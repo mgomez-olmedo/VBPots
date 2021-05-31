@@ -71,7 +71,7 @@ object SingleOperation extends App{
    /**
      * Makes conversion to the desired types
      */
-   val target = ValueStoreTypes.IDPMUT
+   val target = ValueStoreTypes.IDPMSTORE
 
    /**
      * Perform conversion of first potential

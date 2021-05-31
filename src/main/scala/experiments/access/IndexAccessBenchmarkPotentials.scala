@@ -28,9 +28,9 @@ object IndexAccessBenchmarkPotentials extends App {
 
    // defines the list of representations to consider
    val representations = List(ValueStoreTypes.TABLE, ValueStoreTypes.TREE,
-                              ValueStoreTypes.IDPMUT,
-                              ValueStoreTypes.VDILISTMUT,
-                              ValueStoreTypes.IDSETMUT)
+                              ValueStoreTypes.IDPMSTORE,
+                              ValueStoreTypes.VDILMSTORE,
+                              ValueStoreTypes.IDSMSTORE)
 
    // defines a data structure for storing a set of results for
    // a combination of maxCard-minCard and levels

@@ -35,6 +35,8 @@ case class VDILIStore(variables: VariableSet,
     * @return value stored in position given by index
     */
    def getValue(index: Long): Double = {
+      VDILIStore.addGetValueCalls
+
       // find the index in the map
       val result = map.find(entry => entry._2.contains(index)) match {
          case Some((x, _)) => x
@@ -259,6 +261,14 @@ case class VDILIStore(variables: VariableSet,
  * Companion object acting as factory
  */
 object VDILIStore extends Combiner with Marginalizer {
+   var getValueCalls = 0
+
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
+
    /**
     * Factory method
     *

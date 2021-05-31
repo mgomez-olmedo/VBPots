@@ -14,12 +14,12 @@ object UAIMemorySizes extends App{
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
       //ValueStoreTypes.MAPSETGRAIN,
-      ValueStoreTypes.VDGLIST,
+      ValueStoreTypes.VDGLSTORE,
       ValueStoreTypes.VDILISTIMMUT,
       //ValueStoreTypes.MAPSETINDICESIMMUT,
-      ValueStoreTypes.IDPIMMUT,
+      ValueStoreTypes.IDPISTORE,
       // ValueStoreTypes.IDSETIMMUT,
-      ValueStoreTypes.IDMMUT)
+      ValueStoreTypes.IDMMSTORE)
 
    // sets the list of nets to examine
    val nets = List("BN_76.uai", "BN_87.uai", "BN_29.uai",

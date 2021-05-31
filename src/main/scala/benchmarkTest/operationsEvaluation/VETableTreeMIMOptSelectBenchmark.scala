@@ -83,7 +83,7 @@ object VETableTreeMIMOptSelectBenchmark extends App {
 
    // creates a engine for Map with list of indices
    println("Map indices")
-   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.IDMMUT)
+   val bnetMapIndices = Bnet.convert(bnet, ValueStoreTypes.IDMMSTORE)
    var engine = new VariableElimination(bnetMapIndices, false)
 
    // gets the number of alternatives for this representation

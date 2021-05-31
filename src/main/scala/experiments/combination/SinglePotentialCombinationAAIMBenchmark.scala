@@ -65,8 +65,8 @@ object SinglePotentialCombinationAAIMBenchmark extends App{
    println("Time tree: " + timeTree)
 
    // now convert to AAIM store
-   val pot1AAIM = potential1.convert(ValueStoreTypes.IDPMUT)
-   val pot2AAIM = potential2.convert(ValueStoreTypes.IDPMUT)
+   val pot1AAIM = potential1.convert(ValueStoreTypes.IDPMSTORE)
+   val pot2AAIM = potential2.convert(ValueStoreTypes.IDPMSTORE)
 
    // set functions to def - def
    pot1AAIM.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)

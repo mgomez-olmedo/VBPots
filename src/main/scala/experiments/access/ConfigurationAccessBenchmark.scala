@@ -104,7 +104,7 @@ object ConfigurationAccessBenchmark extends App {
       val potential = Potential.readObject(filename)
 
       // convert to tree
-      val aaim = potential.convert(ValueStoreTypes.IDSETMUT)
+      val aaim = potential.convert(ValueStoreTypes.IDSMSTORE)
 
       // read the indexes file
       val indexFilename = path + "ind-" +i + ".ind"

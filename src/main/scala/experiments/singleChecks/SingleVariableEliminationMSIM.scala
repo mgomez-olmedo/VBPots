@@ -68,7 +68,7 @@ object SingleVariableEliminationMSIM extends App{
      map(bnet.variables.getVariable(_).name).mkString(" "))
 
    // creates a engine for tree
-   val convertedBnet = Bnet.convert(bnet, ValueStoreTypes.VDISETMUT)
+   val convertedBnet = Bnet.convert(bnet, ValueStoreTypes.VDISISTORE)
    val engine = new VariableElimination(convertedBnet, false)
 
    // gets the number of alternatives for this representation

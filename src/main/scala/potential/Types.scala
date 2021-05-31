@@ -26,22 +26,20 @@ object ValueStoreTypes extends Enumeration{
    val TABLE,              // CPTs usual representation (TableStore)
       TREE,                // normal tree representation (TreeStore)
       PRUNEDTREE,          // trees with a prune operation after creation
-      VDGSET,         // map value - set of grains with indices
-      VDGLIST,        // map value - list of grain with indices
-      VDILISTMUT,   // map value - list of indices (mutable)
-      VDILISTIMMUT, // map value - list of indices (inmutable)
-      VDISETMUT,    // map value - set of indices (mutable)
-      VDISETIMMUT,  // map value - set of indices (immutable)
-      IDPMUT,     // array of values, array of pairs (long, long)
-                           // with index - index of related value in the
-                           // list of values (mutable - ArrayBuffer)
-      IDPIMMUT,   // array of values, list of pairs (long, long)
-                           // with index - index of related value in the
-                           // array of values (inmutable - Array)
-      IDSETMUT,  // array set of indices and array of values
-                           // (mutable)
-      IDSETIMMUT, // array set of indices and array of values
-                           // (immutable)
-      IDMMUT        // map index - index in values array (mutable)s
+      VDGSSTORE,    // Value based - map value - set of grains with indices
+      VDGLSTORE,    // Value based - map value - list of grain with indices
+      VDILMSTORE,   // Value based - map value - mutable list of indices
+      VDILISTIMMUT, // Value based - map value - immutable list of indices
+      VDISMSTORE,   // Value based - map value - mutable set of indices
+      VDISISTORE,   // Value based - map value - immutable set of indices
+      IDPMSTORE,    // Index based - mutable array of values, array of pairs (indexp, indexv)
+                                    // with indexv - index of related value in the
+                                    // list of values. indexp: index in potential
+      IDPISTORE,   // Index based - immutable array of values, list of pairs (indexp, indexv)
+                           // with indexv - index of related value in the
+                           // array of values. indexp: index in potential
+      IDSMSTORE,   // Index based - mutable array of sets of indices and array of values
+      IDSISTORE,   // Index based - immutable sets of indices and array of values
+      IDMMSTORE    // Index based - mutable map index - index in values array (mutable)s
       = Value
 }

@@ -111,10 +111,10 @@ object BnetPotentialInspection extends App{
    val listAlternatives = List(ValueStoreTypes.TABLE,
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
-      ValueStoreTypes.VDGLIST,
+      ValueStoreTypes.VDGLSTORE,
       ValueStoreTypes.VDILISTIMMUT,
-      ValueStoreTypes.IDPIMMUT,
-      ValueStoreTypes.IDMMUT)
+      ValueStoreTypes.IDPISTORE,
+      ValueStoreTypes.IDMMSTORE)
 
    /**
      * creates an object of inspector class

@@ -41,7 +41,7 @@ object CombinationAAIMBenchmark extends App {
 
    // defines the list of representations to consider
    val representations = List(ValueStoreTypes.TABLE, ValueStoreTypes.TREE,
-                              ValueStoreTypes.IDPMUT)
+                              ValueStoreTypes.IDPMSTORE)
 
    // consider the alternatives of combination function for AAIM
    val functions = List(OperatorType.DEFAULT, OperatorType.ALT1, OperatorType.ALT2,
@@ -108,7 +108,7 @@ object CombinationAAIMBenchmark extends App {
 
          for(i <- functions.indices){
             println("Function:  " + functions(i).toString)
-            val aaimData = times((ValueStoreTypes.IDPMUT, functions(i), i, j))
+            val aaimData = times((ValueStoreTypes.IDPMSTORE, functions(i), i, j))
 
             // gets statistics
             val aaimMean = Util.mean(aaimData)
@@ -232,8 +232,8 @@ object CombinationAAIMBenchmark extends App {
             var potential2 = Potential.readObject(filename2)
 
             // convert to aaim
-            potential1 = potential1.convert(ValueStoreTypes.IDPMUT)
-            potential2 = potential2.convert(ValueStoreTypes.IDPMUT)
+            potential1 = potential1.convert(ValueStoreTypes.IDPMSTORE)
+            potential2 = potential2.convert(ValueStoreTypes.IDPMSTORE)
 
             // set functions for combination and marginalization
             potential1.setFunctions(functions(i), OperatorType.DEFAULT)
@@ -245,12 +245,12 @@ object CombinationAAIMBenchmark extends App {
          }
 
          // stores times for the corresponding combination
-         times += ((ValueStoreTypes.IDPMUT,
+         times += ((ValueStoreTypes.IDPMSTORE,
             functions(i), cardIndex, levelsIndex) -> representationTimes)
       }
 
       // save results for tables
-      saveResultsFunctions(cardIndex, levelsIndex, ValueStoreTypes.IDPMUT)
+      saveResultsFunctions(cardIndex, levelsIndex, ValueStoreTypes.IDPMSTORE)
    }
 
    /**

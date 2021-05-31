@@ -27,7 +27,7 @@ case class VDISMStore(variables: VariableSet,
    /**
     * kind of store
     */
-   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDISETMUT
+   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDISMSTORE
 
    /**
     * Gets the value for a corresponding index
@@ -36,6 +36,8 @@ case class VDISMStore(variables: VariableSet,
     * @return value stored in the index passed as argument
     */
    def getValue(index: Long): Double = {
+      VDISMStore.addGetValueCalls
+
       // find the index in the map
       map.find(entry => entry._2.contains(index)).
          getOrElse((Util.DEFAULTVALUE, Set()))._1
@@ -253,6 +255,14 @@ case class VDISMStore(variables: VariableSet,
  * Companion object acting as factory
  */
 object VDISMStore extends Combiner with Marginalizer{
+   var getValueCalls = 0
+
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
+
    /**
     * factory method
     *

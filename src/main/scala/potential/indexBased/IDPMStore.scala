@@ -27,11 +27,6 @@ case class IDPMStore(variables: VariableSet,
                      values: ArrayBuffer[Double]) extends ValueDrivenStore
               with Combiner with Marginalizer{
 
-   // adds one to objects
-   IDPMStore.objects += 1
-   IDPMStore.indices += indices.length * 2
-   IDPMStore.values += values.length
-
    /**
     * sets behavior for default value treatment
     */
@@ -41,7 +36,7 @@ case class IDPMStore(variables: VariableSet,
    /**
     * sets the kind of store
     */
-   override val kind: ValueStoreTypes.Value = ValueStoreTypes.IDPMUT
+   override val kind: ValueStoreTypes.Value = ValueStoreTypes.IDPMSTORE
 
    /**
     * Gets the value for a corresponding index
@@ -50,6 +45,9 @@ case class IDPMStore(variables: VariableSet,
     * @return value corresponding to index
     */
    def  getValue(index: Long): Double = {
+      // increments counter calls
+      IDPMStore.addGetValueCalls
+
       // checks the array of indices looking for a pair
       // containing the index as first element
       //val result: (Long, Long) = {
@@ -98,16 +96,13 @@ case class IDPMStore(variables: VariableSet,
       // indices. In any other case it is needed to add a
       // new value
       if (indexForValue != -1) {
-         IDPMStore.indices += 1
          indices += ((index, indexForValue.toLong))
       }
       else {
          // add a new index on indices array
-         IDPMStore.indices += 1
          indices += ((index, values.length.toLong))
 
          // add the new value
-         IDPMStore.values += 1
          values += value
       }
 
@@ -365,20 +360,13 @@ case class IDPMStore(variables: VariableSet,
  * Companion object
  */
 object IDPMStore extends Combiner with Marginalizer {
-   /**
-    * counter of indices
-    */
-   private var indices: Double = 0
+   var getValueCalls = 0
 
-   /**
-    * counter of values
-    */
-   private var values: Double = 0
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
 
-   /**
-    * counter of objects
-    */
-   private var objects: Double = 0
+   def getGetValueCalls = getValueCalls
 
    /**
     * Factory method

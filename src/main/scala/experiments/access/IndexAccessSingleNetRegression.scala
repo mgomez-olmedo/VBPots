@@ -14,11 +14,11 @@ object IndexAccessSingleNetRegression extends Bench.Regression {
    val representations = List(
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
-      ValueStoreTypes.VDGLIST,
+      ValueStoreTypes.VDGLSTORE,
       ValueStoreTypes.VDILISTIMMUT,
-      ValueStoreTypes.IDPIMMUT,
-      ValueStoreTypes.IDSETIMMUT,
-      ValueStoreTypes.IDMMUT)
+      ValueStoreTypes.IDPISTORE,
+      ValueStoreTypes.IDSISTORE,
+      ValueStoreTypes.IDMMSTORE)
 
    // defines a data structure for storing the result for
    // each net and data structure

@@ -28,7 +28,7 @@ case class IDPIStore(variables: VariableSet,
 
    // Set the kind of store
    override val kind: ValueStoreTypes.Value =
-                     ValueStoreTypes.IDPIMMUT
+                     ValueStoreTypes.IDPISTORE
 
    /**
     * Gets the value for a corresponding index
@@ -37,6 +37,8 @@ case class IDPIStore(variables: VariableSet,
     * @return value store in the index passed as argument
     */
    def getValue(index: Long): Double = {
+      IDPIStore.addGetValueCalls
+
       // checks the array of indices looking for a pair
       // containing the index as first element
       val result: (Long, Long) =  indices.find(pair => pair._1 == index).
@@ -268,6 +270,13 @@ case class IDPIStore(variables: VariableSet,
  * Companion object
  */
 object IDPIStore extends Combiner with Marginalizer {
+   var getValueCalls = 0
+
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
 
    /**
     * Factory method

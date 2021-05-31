@@ -24,7 +24,7 @@ case class VDISIStore(variables: VariableSet,
    /**
     * kind of storage
     */
-   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDISETIMMUT
+   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDISISTORE
 
    /**
     * Gets the value for a corresponding index
@@ -33,6 +33,7 @@ case class VDISIStore(variables: VariableSet,
     * @return value related to the index
     */
    def getValue(index: Long): Double = {
+      VDISIStore.addGetValueCalls
 
       // find the index in the map
       map.find(entry => entry._2.contains(index)).getOrElse((Util.DEFAULTVALUE, Set()))._1
@@ -242,6 +243,14 @@ case class VDISIStore(variables: VariableSet,
  * Companion object acting as factory
  */
 object VDISIStore extends Combiner with Marginalizer{
+   var getValueCalls = 0
+
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
+
    /**
     * Factory method
     *

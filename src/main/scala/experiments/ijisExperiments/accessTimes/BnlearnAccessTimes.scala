@@ -19,7 +19,7 @@ object BnlearnAccessTimes extends App {
 
   // set the number of configurations (indexes) to access
   // for bnlearn networks
-  val numberConfigurations = 10000
+  val numberConfigurations = 10000L
 
   // makes serialization if needed. This makes computation time for the
   // experiment shorter when serialized versions of networks are available
@@ -29,5 +29,7 @@ object BnlearnAccessTimes extends App {
   // shows the header with information about types of interest
   val reps = "net & " + "TABLE  & " + IndexAccessBnetSelectBenchmark.representations.mkString(" & ")
   println(reps)
-  IndexAccessBnetSelectBenchmark.singleAnalysis("alarm.net", numberConfigurations)
+  for(net <- nets) {
+    IndexAccessBnetSelectBenchmark.singleAnalysis(net, numberConfigurations)
+  }
 }

@@ -30,7 +30,7 @@ case class IDSIStore(variables: VariableSet,
    /**
     * kind of storage
     */
-   override val kind: ValueStoreTypes.Value = ValueStoreTypes.IDSETIMMUT
+   override val kind: ValueStoreTypes.Value = ValueStoreTypes.IDSISTORE
 
    /**
     * Gets the value for a corresponding index
@@ -39,6 +39,8 @@ case class IDSIStore(variables: VariableSet,
     * @return value related to the index passed as argument
     */
    override def getValue(index: Long): Double = {
+      IDSIStore.addGetValueCalls
+
       // find the index in the sets
       val indexResult = indicesSets.indices.
          find(indexInArray => indicesSets(indexInArray).
@@ -278,6 +280,13 @@ case class IDSIStore(variables: VariableSet,
  * Companion object offering factory methods
  */
 object IDSIStore extends Combiner with Marginalizer {
+   var getValueCalls = 0
+
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
 
    /**
     * Factory method

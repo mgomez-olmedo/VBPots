@@ -31,7 +31,7 @@ case class VDILMStore(variables: VariableSet,
    /**
     * kind of storage
     */
-   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDILISTMUT
+   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDILMSTORE
 
    /**
     * Gets the value for a corresponding index
@@ -40,11 +40,13 @@ case class VDILMStore(variables: VariableSet,
     * @return value stored at index
     */
    def getValue(index: Long): Double = {
+      VDILMStore.addGetValueCalls
+
       // find the index in the map
       val result =
             map.find(entry => entry._2.contains(index)) match {
-         case Some((x, _)) => x
-         case None => Util.DEFAULTVALUE
+               case Some((x, _)) => x
+               case None => Util.DEFAULTVALUE
       }
 
       // return result
@@ -275,7 +277,13 @@ case class VDILMStore(variables: VariableSet,
  * Companion object acting as factory
  */
 object VDILMStore extends Combiner with Marginalizer{
+   var getValueCalls = 0
 
+   def addGetValueCalls = {
+      getValueCalls+=1
+   }
+
+   def getGetValueCalls = getValueCalls
    /**
     * Factory method
     *

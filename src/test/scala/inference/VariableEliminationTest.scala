@@ -20,11 +20,11 @@ class VariableEliminationTest extends FunSuite{
    val treeEngine=new VariableElimination(
       Bnet.convert(bnet, ValueStoreTypes.TREE), false)
    val aimEngine = new VariableElimination(
-      Bnet.convert(bnet, ValueStoreTypes.IDPMUT), false)
+      Bnet.convert(bnet, ValueStoreTypes.IDPMSTORE), false)
    val asimEngine = new VariableElimination(
-      Bnet.convert(bnet, ValueStoreTypes.IDSETMUT), false)
+      Bnet.convert(bnet, ValueStoreTypes.IDSMSTORE), false)
    val mlimEngine = new VariableElimination(
-      Bnet.convert(bnet, ValueStoreTypes.VDILISTMUT), false)
+      Bnet.convert(bnet, ValueStoreTypes.VDILMSTORE), false)
 
    /**
     * method for comparing the results of two propagations

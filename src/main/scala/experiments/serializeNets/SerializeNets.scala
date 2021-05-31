@@ -132,11 +132,11 @@ object SerializeNets extends App{
          ValueStoreTypes.TABLE,
          ValueStoreTypes.TREE,
          ValueStoreTypes.PRUNEDTREE,
-         ValueStoreTypes.VDGLIST,
-         ValueStoreTypes.VDILISTMUT,
-         ValueStoreTypes.IDPMUT,
-         ValueStoreTypes.IDSETMUT,
-         ValueStoreTypes.IDMMUT)
+         ValueStoreTypes.VDGLSTORE,
+         ValueStoreTypes.VDILMSTORE,
+         ValueStoreTypes.IDPMSTORE,
+         ValueStoreTypes.IDSMSTORE,
+         ValueStoreTypes.IDMMSTORE)
 
       // makes conversions and store files
       representations.foreach(representation => {
