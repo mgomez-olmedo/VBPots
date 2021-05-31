@@ -1,7 +1,7 @@
 package experiments.ijisExperiments.accessTimes
 
 import experiments.access.IndexAccessBnetSelectBenchmark
-import experiments.serializeNets.SerializeNets
+import experiments.serializeNets.NetSerializator
 
 /**
  * Object for generating the results for access times experiment
@@ -23,7 +23,7 @@ object BnlearnAccessTimes extends App {
 
   // makes serialization if needed. This makes computation time for the
   // experiment shorter when serialized versions of networks are available
-  nets.foreach(net => SerializeNets.serializeNet(net,
+  nets.foreach(net => NetSerializator.serializeNet(net,
     IndexAccessBnetSelectBenchmark.representations))
 
   // shows the header with information about types of interest

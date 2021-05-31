@@ -1,10 +1,10 @@
 package experiments.access
 
 import bnet.Bnet
-import experiments.serializeNets.SerializeNets
-import org.scalameter.{Bench, Key, Measurer, Warmer, config, withMeasurer}
+import experiments.serializeNets.NetSerializator
+import org.scalameter._
 import potential.ValueStoreTypes
-import utils.Util
+import _root_.utils.Util
 
 import java.io.{File, PrintWriter}
 import scala.collection.mutable.HashMap
@@ -133,9 +133,10 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
       representations.foreach(representation => {
          val filename = netName + "-obj-" + representation.toString +
             "." + extension
+         println("filename for potentials serialization: " + filename)
 
          // convert the bnet to the desired representation
-         val convertedNet = SerializeNets.readSerializedNet(fileName, representation)
+         val convertedNet = NetSerializator.readSerializedNet(fileName, representation)
 
          // try the list of access
          time = measureTime(convertedNet, accessSet)

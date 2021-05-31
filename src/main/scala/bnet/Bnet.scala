@@ -208,7 +208,7 @@ object Bnet {
             val reader = new FileReader(folder + netName)
             parserUAI.parseAll(parserUAI.component, reader).get
          case "uaix" =>
-            val folder = "./data/UAI/selected/"
+            val folder = "./data/UAI/"
             UAIDirectParsing.process(folder + netName)
       }
 
@@ -294,9 +294,9 @@ object Bnet {
          case "net" =>
             "./data/bnlearn/"
          case "uai" =>
-            "./data/UAI/selected/"
+            "./data/UAI/"
          case "uaix" =>
-            "./data/UAI/selected/"
+            "./data/UAI/"
       }
 
       // return folder

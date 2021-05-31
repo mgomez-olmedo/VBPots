@@ -1,7 +1,7 @@
 package experiments.access
 
 import bnet.Bnet
-import experiments.serializeNets.SerializeNets
+import experiments.serializeNets.NetSerializator
 import org.scalameter._
 import potential.ValueStoreTypes
 import potential.indexBased.IDPMStore
@@ -96,7 +96,7 @@ object IndexAccessBnetRepSelectBenchmark extends Bench.ForkedTime {
       // compose file with serialized version and read the
       // corresponding object
       // val bnet = Bnet.readObject(filename)
-      val bnet = SerializeNets.readSerializedNet(netName + "." + extension, representation)
+      val bnet = NetSerializator.readSerializedNet(netName + "." + extension, representation)
 
       // prepare access set
       val accessSet = prepareAccessSet(bnet, numberConfigurations)
