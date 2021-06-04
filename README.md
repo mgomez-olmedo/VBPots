@@ -1,8 +1,20 @@
 # VBPots
 
-Software for testing Value-Based Potentials as alternative data structures for storing the quantitative information of Probabilistic Graphical Models (PGMs).
+Software for testing Value-Based Potentials as alternative data structures for storing the quantitative information of Probabilistic Graphical Models (PGMs). The results of the test are included in the paper submitted to the International Journal of Intelligent Systems and titled **Value-Based Potentials Exploiting Regularity Patterns of Quantitative Information in Probabilistic Graphical Models**.
 
 It was developed using IntelliJ as an **sbt** project and using the configuration presented in file **build.sbt**. The most straightforward way to reproduce the experiments is importing the project into IntelliJ and executing the classes from the same IDE. 
+
+The package containing the classes required for generating the results included in the paper is titled **ijisExperiments** included in a general package (**experiments**) containing classes and tools for a wide set of experiments over VBPots. 
+
+## Extreme case experiment
+
+This experiment is included in section 5.5, **Example of a extreme case**. The experiment consists of generating 10 different random potentials forcing specific conditions on their values:
+
+* only 3 values are allowed (0.0, 0.5 and 1).
+* 0.0 is taken as default value.
+* high percentage of repetitions for it (around 70%)
+
+The file including the software for this experiment is stored in a specific package under **ijisExperiments** and named **extremeCases**. The file **ExtremeCaseAnalysis** include all the elements for reproducing these results. It contains a class and a executable companion object. The execution of the object perform the analysis on a single potential. At the end of the output of the software it is presented a summary of memory sizes corresponding to 1DA, PT, PPT, VDG, VDI, IDP and IDM.
 
 ## Experiments for measuring memory spaces
 

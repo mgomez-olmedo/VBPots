@@ -50,6 +50,23 @@ case class IDPIStore(variables: VariableSet,
          values(result._2.toInt)
    }
 
+   def getValue2(index : Long) : Double = {
+      def go(tuples: List[(Long, Long)]) : Double = {
+         tuples match{
+            case head::tail => {
+               if(head._1 == index) values(head._2.toInt)
+               else{
+                  if(head._1 <= index) go(tail)
+                  else Util.DEFAULTVALUE
+               }
+            }
+            case _ =>  Util.DEFAULTVALUE
+         }
+      }
+
+      go(indices.toList)
+   }
+
    /**
     * Gets the list of values without repeated values
     *

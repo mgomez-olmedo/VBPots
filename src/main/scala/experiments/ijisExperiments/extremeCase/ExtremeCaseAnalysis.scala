@@ -1,15 +1,24 @@
-package experiments
+package experiments.ijisExperiments.extremeCase
 
-import experiments.generation.PotentialsGeneration.generateIJISExample
+import experiments.generation.PotentialsGeneration.generateExtremeCasePotential
 import potential.ValueStoreTypes
 import potential.valueBased.VDGLStore
 
-class SinglePotentialIJISExample(percentage : Double) {
-   val potential = generateIJISExample(percentage)
+/**
+ * Class for getting insight about potentials storage of
+ * extreme case distributions. It offers a single potential
+ * for analyzing its properties
+ * @param percentage
+ */
+class ExtremeCaseAnalysis(percentage : Double) {
+   val potential = generateExtremeCasePotential(percentage)
    print(potential)
 }
 
-object SinglePotentialIJISExample extends App{
+/**
+ * Companion object for performing the experiment
+ */
+object ExtremeCaseAnalysis extends App{
    val typesOfInteres = List(
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
@@ -20,7 +29,8 @@ object SinglePotentialIJISExample extends App{
    )
 
    // create object
-   val example = new SinglePotentialIJISExample(0.70)
+   val percentage = 0.7
+   val example = new ExtremeCaseAnalysis(percentage)
    val difValues = example.potential.store.getDifferentValues
    println("dif values: " + difValues)
 
@@ -49,4 +59,14 @@ object SinglePotentialIJISExample extends App{
    // convert into IDM
    val idm = example.potential.convert(ValueStoreTypes.IDMMSTORE)
    println(idm)
+
+   // show summary information about all the representations
+   println("\n----------------Summary of memory sizes------------------")
+   println("1DA: " + example.potential.getMemorySize)
+   println("PT: " + tree.getMemorySize)
+   println("PPT: " + prunedTree.getMemorySize)
+   println("VDG: " + vdg.getMemorySize)
+   println("VDI: " + vdi.getMemorySize)
+   println("IDP: " + idp.getMemorySize)
+   println("IDM: " + idm.getMemorySize)
 }
