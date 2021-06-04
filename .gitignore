@@ -16,5 +16,5 @@ nohup*
 *.jar
 script*
 .DS_Store
-data/bnlearn/*/*
-data/UAI/*/*
+data/bnlearn/*/*-obj-*
+data/UAI/*/*-obj-*
