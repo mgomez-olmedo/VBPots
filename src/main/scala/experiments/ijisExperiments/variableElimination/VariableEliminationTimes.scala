@@ -1,15 +1,17 @@
-package experiments.variableElimination
+package experiments.ijisExperiments.variableElimination
 
 import bnet.Bnet
+import experiments.serializeNets.NetSerializator
 import inference.VariableElimination
-import org.scalameter._
+import org.scalameter.{Bench, Key, Measurer, Warmer, config, withMeasurer}
 import potential.{OperatorType, ValueStoreTypes}
+import utils.Util
 
 import java.io.{File, PrintWriter}
 import scala.collection.mutable.HashMap
 import scala.util.Random
 
-object VariableEliminationBenchmarkNets extends Bench.ForkedTime {
+object VariableEliminationTimes extends Bench.ForkedTime {
 
    // defines the list of representations to consider
    val representations = List(
@@ -46,14 +48,12 @@ object VariableEliminationBenchmarkNets extends Bench.ForkedTime {
    /**
     * makes the analysis for a net
     * @param netname
-    * @param extension
     * @param folder
     * @param numberConfigurations
     */
-   def singleAnalysis(netname : String, extension : String,
-                      numberVariables : Int) = {
+   def singleAnalysis(netname : String, numberVariables : Int) = {
       println("starting analysis of net " + netname)
-      analyzeNet(netname, extension, numberVariables)
+      analyzeNet(netname, numberVariables)
       println("ended analysis of net")
    }
 
@@ -98,11 +98,15 @@ object VariableEliminationBenchmarkNets extends Bench.ForkedTime {
     * Analyzes the access to a certain network and a given
     * number of configurations
     */
-   def analyzeNet(netName : String, extension : String,
-                  numberVariables : Int) = {
+   def analyzeNet(netName : String, numberVariables : Int) = {
       // read bnet file and makes Bnet object
       println("staring analysis of net: " + netName)
-      val bnet = Bnet(netName + "." + extension)
+      val bnet = Bnet(netName)
+
+      // gets extension from netname
+      val elements = Util.separateExtension(netName)
+      val baseName = elements._1
+      val extension = elements._2
 
       // sets the number of variables according to the number
       // of variables in the net
@@ -138,12 +142,8 @@ object VariableEliminationBenchmarkNets extends Bench.ForkedTime {
 
       // measure the time for the rest of representations
       representations.foreach(representation => {
-         println("reading serialized object " + representation.toString)
-         val filename = netName + "-obj-" + representation.toString +
-            "." + extension
-
          // convert the bnet to the desired representation
-         val convertedNet = Bnet.readObject(filename)
+         val convertedNet = NetSerializator.readSerializedNet(netName, representation)
 
          // makes a engine for this net
          engine = new VariableElimination(convertedNet, false)
@@ -259,12 +259,11 @@ object VariableEliminationBenchmarkNets extends Bench.ForkedTime {
    //batchAnalysis(folder, extension)
    //generatePaperLatexTable
    override def main(args : Array[String]) = {
-      println("net: " + args(0) + " extension: " + args(1))
-      val extension = args(1)
+      println("net name: " + args(0) )
       var numberVariables: Int = 10
 
       println("numberVariables: " + numberVariables)
-      singleAnalysis(args(0), extension, numberVariables)
+      singleAnalysis(args(0), numberVariables)
    }
 }
 
