@@ -16,7 +16,7 @@ object IDPIStoreAccessBenchmark extends App{
   ) withWarmer (new Warmer.Default)
 
   // sets the number of indices to access
-  val counter = 10
+  val counter = 10000
 
   // sets the net to use for testing
   val netName = "mildew.net"
@@ -61,6 +61,10 @@ object IDPIStoreAccessBenchmark extends App{
   // check the differences between result1 and result2
   val comparisons = (0 until counter).map(index => result1(index) == result2(index))
   println("comparison flags: " + comparisons.distinct)
+
+  // shows result vector lengths
+  //println("result1 length: " + result1.length)
+  //println("result2 length: " + result2.length)
 
   println("resultado1: " + result1)
   println("resultado2: " + result2)
