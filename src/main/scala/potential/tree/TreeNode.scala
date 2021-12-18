@@ -335,7 +335,6 @@ object TreeNode {
     * @return result of the operation
     */
    def combine(tree1: TreeNode, tree2: TreeNode): TreeNode = {
-
       // considers the kind of this node
       val result = tree1 match {
          // case 1: this is a leaf node
