@@ -39,11 +39,13 @@ object VETableTreeMIBenchmark extends App {
 
    // general test: propagation with CPT, PTs and AIMut
    // starts with CPT representation
+   println("...............starting work with TABLE - def - def ..............")
    val cptTime = standardConfig measure {
       engineTables.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)
       engineTables.propagate
    }
 
+   println("...............starting work with TREE - def - def ..............")
    val treeTime = standardConfig measure {
       engineTree.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)
       engineTree.propagate

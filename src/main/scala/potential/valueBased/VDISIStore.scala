@@ -237,6 +237,23 @@ case class VDISIStore(variables: VariableSet,
       VDISIStore.combineDefault)
    registerMarginalizationFunction(OperatorType.DEFAULT,
       VDISIStore.marginalizeDefault)
+
+   /**
+    * Abstract method for pruning
+    *
+    * @param threshold maximum loss of entropy
+    * @return
+    */
+   override def prune(threshold: Double): ValueDrivenStore = ???
+
+   /**
+    * merge two entries of the store producing a new one
+    *
+    * @param value1
+    * @param value2
+    * @return
+    */
+   override def merge(value1: Double, value2: Double): ValueDrivenStore = ???
 }
 
 /**

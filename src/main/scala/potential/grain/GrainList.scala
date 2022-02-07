@@ -6,10 +6,10 @@ import utils.DataSizes
  * Class for storing grains with a list
  *
  * @constructor creates an object with the information
- *              passed as argumentk
+ *              passed as argument
  * @param list list of grains stored in the object
  */
-case class GrainList(list: List[Grain]) {
+case class GrainList(list: List[Grain]) extends Iterable[Grain]{
    /**
     * adds a new index to the list
     *
@@ -35,11 +35,30 @@ case class GrainList(list: List[Grain]) {
    }
 
    /**
+    * adds a new grain to the list
+    * @param grain
+    * @return
+    */
+   def addGrain(grain : Grain) : GrainList = {
+      val coincident = list.find(grainb => grainb.isConsecutiveGrain(grain))
+      if(!coincident.isEmpty){
+         // remove coincident and add a new one
+         val newGrain = Grain.merge(coincident.get, grain)
+         val newList = list.filter(keep => keep != coincident.get)
+         new GrainList(newGrain::newList)
+      }
+      else{
+         // just add the grain passed as argument
+         new GrainList(grain :: list)
+      }
+   }
+
+   /**
     * returns the list of grains
     *
     * @return
     */
-   def toList: List[Grain] = list
+   override def toList: List[Grain] = list
 
    /**
     * find an index in the list of grains
@@ -107,7 +126,26 @@ case class GrainList(list: List[Grain]) {
     */
    override def toString: String = {
       val string1 = "GrainList( "
-      val string2 = string1 + list.map(grain => grain.toString).mkString(" ") + ")\n"
+      val string2 = string1 + list.map(grain => grain.toString).mkString(" ")
       string2
+   }
+
+   /**
+    * Makes class iterable
+    * @return
+    */
+   override def iterator: Iterator[Grain] = list.iterator
+}
+
+/**
+ * companion object of the class
+ */
+object GrainList{
+   def merge(grains1 : GrainList, grains2 : GrainList) : GrainList = {
+      var result = grains1
+      grains2.foreach(grain => result = result.addGrain(grain))
+
+      // return result
+      result
    }
 }

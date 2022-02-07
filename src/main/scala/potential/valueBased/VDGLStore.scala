@@ -301,6 +301,53 @@ case class VDGLStore(variables: VariableSet,
       output
    }
 
+   /**
+    * method for pruning
+    * @param threshold maximum loss of entropy
+    *  @return
+    */
+   def prune(threshold : Double) : VDGLStore = {
+      // gets the list of different values
+      val differentValues = getDifferentValues
+
+      // get differences for the alternative merge operations
+      val option : (Double, Int) = (0 until differentValues.size).map(
+         index => computeDifference(index, differentValues)).zipWithIndex.min;
+
+      // creates a new map removing entries for index and index+1
+      val reduced = map - differentValues(option._2) - differentValues(option._2+1)
+
+      // merge entries: the method return a new store with a single
+      // entry for the result of the operation
+      val newEntry : VDGLStore = merge(differentValues(option._2), differentValues(option._2+1))
+
+      // add the new entry to reduced and return the result
+      new VDGLStore(variables, reduced + newEntry.map.head)
+   }
+
+   /**
+    * merge two entries and produces a new map with a single entry
+    * for the resultant value
+    * @param value1
+    * @param value2
+    * @return
+    */
+   override def merge(value1 : Double, value2 : Double) : VDGLStore = {
+      val data1 = computeSumAndSizeForValue(value1)
+      val data2 = computeSumAndSizeForValue(value2)
+      val newValue = (data1._1 + data2._1)/(data1._2 + data2._2)
+
+      // gets both list of grains
+      val grains1 = map.get(value1).get
+      val grains2 = map.get(value2).get
+
+      // merge both of them
+      val grains : GrainList = GrainList.merge(grains1, grains2)
+
+      // creates a map with the new entry
+      VDGLStore(variables, newValue, grains)
+   }
+
    // register available functions for marginalization
    // and combination
    registerCombinationFunction(OperatorType.DEFAULT,

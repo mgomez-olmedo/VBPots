@@ -123,4 +123,20 @@ object Grain {
    def apply(index: Long): Grain = {
       new Grain(index, index)
    }
+
+   /**
+    * creates a new grain as a merge of two grains: both of
+    * them must be consecutive
+    * @param grain1
+    * @param grain2
+    * @return
+    */
+   def merge(grain1 : Grain, grain2 : Grain) : Grain = {
+         if(grain1.start < grain2.start){
+            new Grain(grain1.start, grain2.end)
+         }
+         else{
+            new Grain(grain2.start, grain1.end)
+         }
+   }
 }
