@@ -13,13 +13,14 @@ import scala.collection.immutable.HashMap
  * dictionary of entries where each entry contains:
  * - key: one of the different values of the potential
  * - value: list of grains containing indices where the
- *          value acting as key is stored
+ * value acting as key is stored
+ *
  * @param variables potential domain
- * @param map dictionary with information
+ * @param map       dictionary with information
  */
 case class VDGLStore(variables: VariableSet,
                      map: Map[Double, GrainList]) extends ValueDrivenStore
-                     with Combiner with Marginalizer{
+   with Combiner with Marginalizer {
    /**
     * Default value strategy
     */
@@ -63,8 +64,8 @@ case class VDGLStore(variables: VariableSet,
     *
     * @param value value to add
     * @param index index for the value
-    * TODO: review this method ----
-    * how to efficiently aggregate a new index to a set of grains?
+    *              TODO: review this method ----
+    *              how to efficiently aggregate a new index to a set of grains?
     * @return new storage after the operation
     */
    def addValueForRepresentation(value: Double, index: Long): VDGLStore = {
@@ -90,7 +91,8 @@ case class VDGLStore(variables: VariableSet,
 
    /**
     * split the store into a new list of stores, one per value
-    *  @return
+    *
+    * @return
     */
    override def split: List[ValueStore] = {
       map.keySet.map(value => VDGLStore(variables, value, map(value))).toList
@@ -112,7 +114,7 @@ case class VDGLStore(variables: VariableSet,
     * @return list of different values
     */
    override def getDifferentValues: List[Double] = {
-      Util.DEFAULTVALUE :: map.keySet.toList
+      map.keySet.toList.sorted
    }
 
    /**
@@ -161,7 +163,7 @@ case class VDGLStore(variables: VariableSet,
     */
    override def getIndices: List[Long] = {
       getDifferentValues.
-            flatMap(value => getIndicesForValue(value))
+         flatMap(value => getIndicesForValue(value))
    }
 
    /**
@@ -243,11 +245,11 @@ case class VDGLStore(variables: VariableSet,
 
       // gets sizes due to grains
       val grainSizes =
-            map.values.map(grainList => grainList.getMemorySize).sum
+         map.values.map(grainList => grainList.getMemorySize).sum
 
       // size due to data structures
       val structuresSize =
-            DataSizes.MAP + map.size * DataSizes.ARRAY
+         DataSizes.MAP + map.size * DataSizes.ARRAY
 
       // return the sum of sizes
       variablesSizes + mapSizes + grainSizes + structuresSize
@@ -265,15 +267,34 @@ case class VDGLStore(variables: VariableSet,
    /**
     * return information about grains: number of grains, max
     * length of grain, average length of grains
+    *
     * @return tuple with number of grains - max length - average length
     */
    def getGrainsInfo: (Int, Long, Double) = {
       val number = getNumberGrains
       val maxLength = map.values.map(grainList => grainList.getMaxLength).max
-      val avgLength = map.values.map(grainList => grainList.getAverageLength).sum/(map.values.size*1.0)
+      val avgLength = map.values.map(grainList => grainList.getAverageLength).sum / (map.values.size * 1.0)
 
       // return the tuple
       (number, maxLength, avgLength)
+   }
+
+   /**
+    * return information about length of grains
+    *
+    * @return map with entries for length - number of grains
+    */
+   def getGrainsLength = {
+
+      // get grains info for detecting the max length of all the grains
+      val maxLength = getGrainsInfo._2
+
+      // considers all the lengths and count how many grains has this length
+      (1L to maxLength).map(length => {
+         val lengthCounter: Int = map.values.map(granList =>
+            granList.filter(grain => grain.getSize == length).size).filter(counter => counter != 0).sum
+         (length, lengthCounter)
+      }).toMap.filter(entry => entry._2 != 0)
    }
 
    /**
@@ -289,7 +310,7 @@ case class VDGLStore(variables: VariableSet,
       output = output + variables.toString
       output = output + "Main variable: " + mainVariable.name
       output = output + "\nIndices and value indices: \n"
-      output = output + map.keySet.map(value => {
+      output = output + getDifferentValues.map(value => {
          value.toString + "-> " + map.get(value).toString + " "
       }).mkString("\n") + "\n"
       output = output + "Default value: " + Util.DEFAULTVALUE + "\n"
@@ -297,55 +318,44 @@ case class VDGLStore(variables: VariableSet,
       output = output + "indices stored: " + size._1 + "\n"
       output = output + "values stored: " + size._2 + "\n"
       output = output + "number of different values: " + size._3 + "\n"
-      output = output + "memory size: " + getMemorySize
+      output = output + "memory size: " + getMemorySize + "\n"
+      output = output + "grains info \n"
+      val grainsInfo = getGrainsInfo
+      output = output + "number of grains: " + grainsInfo._1 + "\n"
+      output = output + "max length of grains: " + grainsInfo._2 + "\n"
+      output = output + "average size of grains: " + grainsInfo._3 + "\n"
+      // shows info about the counters with the length of the grains
+      output += "counter of length of grains \n"
+      val counters = getGrainsLength
+      output += counters.toString
       output
-   }
-
-   /**
-    * method for pruning
-    * @param threshold maximum loss of entropy
-    *  @return
-    */
-   def prune(threshold : Double) : VDGLStore = {
-      // gets the list of different values
-      val differentValues = getDifferentValues
-
-      // get differences for the alternative merge operations
-      val option : (Double, Int) = (0 until differentValues.size).map(
-         index => computeDifference(index, differentValues)).zipWithIndex.min;
-
-      // creates a new map removing entries for index and index+1
-      val reduced = map - differentValues(option._2) - differentValues(option._2+1)
-
-      // merge entries: the method return a new store with a single
-      // entry for the result of the operation
-      val newEntry : VDGLStore = merge(differentValues(option._2), differentValues(option._2+1))
-
-      // add the new entry to reduced and return the result
-      new VDGLStore(variables, reduced + newEntry.map.head)
    }
 
    /**
     * merge two entries and produces a new map with a single entry
     * for the resultant value
+    *
     * @param value1
     * @param value2
     * @return
     */
-   override def merge(value1 : Double, value2 : Double) : VDGLStore = {
+   override def merge(value1: Double, value2: Double): VDGLStore = {
       val data1 = computeSumAndSizeForValue(value1)
       val data2 = computeSumAndSizeForValue(value2)
-      val newValue = (data1._1 + data2._1)/(data1._2 + data2._2)
+      val newValue = (data1._1 + data2._1) / (data1._2 + data2._2)
 
       // gets both list of grains
       val grains1 = map.get(value1).get
       val grains2 = map.get(value2).get
 
       // merge both of them
-      val grains : GrainList = GrainList.merge(grains1, grains2)
+      val grains: GrainList = GrainList.merge(grains1, grains2)
 
-      // creates a map with the new entry
-      VDGLStore(variables, newValue, grains)
+      // creates a new map removing entries for merged values
+      val reduced: Map[Double, GrainList] = map - value1 - value2
+
+      // creates a new VDGLStore with the result
+      new VDGLStore(variables, reduced + (newValue -> grains))
    }
 
    // register available functions for marginalization
@@ -363,7 +373,7 @@ object VDGLStore extends Combiner with Marginalizer {
    var getValueCalls = 0
 
    def addGetValueCalls = {
-      getValueCalls+=1
+      getValueCalls += 1
    }
 
    def getGetValueCalls = getValueCalls
@@ -372,7 +382,7 @@ object VDGLStore extends Combiner with Marginalizer {
     * Factory method
     *
     * @param variables potential domain
-    * @param values values of potential
+    * @param values    values of potential
     * @return created object
     */
    def apply(variables: VariableSet, values: Array[Double]): VDGLStore = {
@@ -396,37 +406,38 @@ object VDGLStore extends Combiner with Marginalizer {
          case _ =>
             // get the list of different values
             val differentValues: Array[Double] =
-                  values.filter(value => value != Util.DEFAULTVALUE).distinct
+               values.filter(value => value != Util.DEFAULTVALUE).distinct
 
             // gets the indices for each value
             val indicesForVal: Array[Array[Long]] =
                differentValues.map(value => {
                   (0.toLong until values.length.toLong).
-                    filter(index => values(index.toInt) == value).toArray
+                     filter(index => values(index.toInt) == value).toArray
                })
 
             // For each array of indices (related to the
             // same value) get the corresponding set of grains
             val result: Map[Double, GrainList] =
-               differentValues.indices.map(index => {
-                  differentValues(index) ->
-                        GrainList(fromIndicesToGrains(indicesForVal(index)))
-             }).toMap
+            differentValues.indices.map(index => {
+               differentValues(index) ->
+                  GrainList(fromIndicesToGrains(indicesForVal(index)))
+            }).toMap
 
-            // now creates the object storing the values.
-            new VDGLStore(variables, result.seq)
+            // now creates the object storing the values
+            new VDGLStore(variables, result)
       }
    }
 
    /**
     * creates a new object for a single value and with the same
     * list of grains passed as argument
+    *
     * @param variables variables for potential domain
-    * @param value value to store
+    * @param value     value to store
     * @param grainList list of grains for the value
     * @return
     */
-   def apply(variables : VariableSet, value : Double, grainList : GrainList): VDGLStore = {
+   def apply(variables: VariableSet, value: Double, grainList: GrainList): VDGLStore = {
       new VDGLStore(variables, HashMap(value -> grainList.copy()))
    }
 
@@ -451,15 +462,15 @@ object VDGLStore extends Combiner with Marginalizer {
          // gets the sequence of consecutive indices (or -1
          // if that sequence is not found)
          val end = (start until indices.length - 1).
-               indexWhere(index => indices(index) != indices(index + 1) - 1)
+            indexWhere(index => indices(index) != indices(index + 1) - 1)
          val finalEnd = if (end == -1) indices.length - 1
-                        else start + end
+         else start + end
          val sequence = (start, finalEnd)
 
          // makes a new grain for the sequence and add it
          // to the list passed as argument
          val newList = Grain(indices(sequence._1),
-                              indices(sequence._2)) :: list
+            indices(sequence._2)) :: list
 
          // produce a new call to convertSequences if needed
          if (sequence._2 + 1 < indices.length)

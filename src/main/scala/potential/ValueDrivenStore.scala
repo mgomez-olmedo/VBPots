@@ -42,7 +42,75 @@ trait ValueDrivenStore extends ValueStore {
     * @param threshold maximum loss of entropy
     * @return
     */
-   def prune(threshold : Double) : ValueDrivenStore
+   def prune(threshold : Double) : ValueDrivenStore = {
+
+      // makes a map for storing the information loss for each
+      // possible merge
+      val loosesStore: collection.mutable.Map[(Double, Double), Double] =
+      collection.mutable.Map()
+
+      /**
+       * auxiliar method for recursive merge of values
+       *
+       * @param accumulatedLoss
+       * @param globalLoss
+       * @param store
+       * @return
+       */
+      def go(accumulatedLoss: Double, globalLoss: Double,
+             store: ValueDrivenStore,
+             loosesStore: collection.mutable.Map[(Double, Double), Double]): ValueDrivenStore = {
+
+         // get different values
+         val differentValues = store.getDifferentValues
+
+         // acts only if there are several values
+         if (differentValues.size > 1) {
+            // update loss information if required
+            (0 until differentValues.size - 1).foreach(index => {
+               // gets succesive values
+               val value1 = differentValues(index)
+               val value2 = differentValues(index + 1)
+
+               // update only for new pairs of values
+               if (!loosesStore.contains((value1, value2))) {
+                  val loss = store.computeInformationLoss(value1, value2)
+
+                  // add the new information to the store
+                  loosesStore += ((value1, value2) -> loss)
+               }
+            })
+
+            // gets entry with min value of loss
+            val minEntry = loosesStore.minBy(_._2)
+
+            // checks if the merge will be performed
+            if (accumulatedLoss + minEntry._2 < globalLoss) {
+               // make new merge
+               val result = store.merge(minEntry._1._1, minEntry._1._2)
+
+               // removes the entry producing the merge
+               val newLoosesStore = loosesStore.filter(
+                  entry => entry._1._1 != minEntry._1._1 &&
+                     entry._1._2 != minEntry._1._2 &&
+                     entry._1._2 != minEntry._1._1 &&
+                     entry._1._1 != minEntry._1._2)
+
+               // makes a new call for testing new operations
+               go(accumulatedLoss + minEntry._2, globalLoss, result, newLoosesStore)
+            }
+            else {
+               // just return store
+               store
+            }
+         }
+         else {
+            store
+         }
+      }
+      // just call the recursive auxiliar method
+      go(0, threshold, this, loosesStore)
+   }
 
    /**
     * computes the different in information produced when making
@@ -51,19 +119,17 @@ trait ValueDrivenStore extends ValueStore {
     * @param differentValues
     * @return
     */
-   def computeDifference(index : Int, differentValues : List[Double]) : Double = {
+   def computeInformationLoss(value1 : Double, value2 : Double) : Double = {
       // get the values and the corresponding list of indexes
-      val val1 = differentValues(index)
-      val val2 = differentValues(index + 1)
-      val sumSize1 = computeSumAndSizeForValue(val1)
-      val sumSize2 = computeSumAndSizeForValue(val2)
+      val sumSize1 = computeSumAndSizeForValue(value1)
+      val sumSize2 = computeSumAndSizeForValue(value2)
       val sum = sumSize1._1 + sumSize2._1
       val size = sumSize1._2 + sumSize2._2
 
       // computes the difference and return it
       Math.log10(size/sum)*sum -
-         Math.log(sumSize1._2/sumSize1._1)*sumSize1._1 -
-         Math.log(sumSize2._2/sumSize2._1)*sumSize2._1
+         Math.log10(sumSize1._2/sumSize1._1)*sumSize1._1 -
+         Math.log10(sumSize2._2/sumSize2._1)*sumSize2._1
    }
 
    /**

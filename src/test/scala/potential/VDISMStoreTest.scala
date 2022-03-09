@@ -3,9 +3,9 @@ package potential
 import base.{Variable, VariableSet}
 import bnet.Bnet
 import org.scalatest.FunSuite
-import potential.valueBased.{VDGLStore, VDILIStore, VDILMStore}
+import potential.valueBased.{VDGLStore, VDILMStore, VDISMStore}
 
-class VDILMStoreTest extends FunSuite {
+class VDISMStoreTest extends FunSuite {
    // creates variables for domains
    val variable1 = new Variable("X1", List("x11", "x12"))
    val variable2 = new Variable("X2", List("x21", "x22", "x23"))
@@ -19,7 +19,7 @@ class VDILMStoreTest extends FunSuite {
       0.8, 0.2, 0.2, 0.8, 0.9, 0.1)
 
    // creates the store
-   val store = VDILMStore(variableSet1, values1)
+   val store = VDISMStore(variableSet1, values1)
 
    // just print the store
    println(store)

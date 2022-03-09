@@ -40,12 +40,20 @@ case class GrainList(list: List[Grain]) extends Iterable[Grain]{
     * @return
     */
    def addGrain(grain : Grain) : GrainList = {
-      val coincident = list.find(grainb => grainb.isConsecutiveGrain(grain))
-      if(!coincident.isEmpty){
-         // remove coincident and add a new one
-         val newGrain = Grain.merge(coincident.get, grain)
-         val newList = list.filter(keep => keep != coincident.get)
-         new GrainList(newGrain::newList)
+      val matches = grain::list.filter(grainPresent => grainPresent.isConsecutiveGrain(grain))
+
+      // add the grain taking into account the matches
+      if(!matches.isEmpty){
+         // detect limits for the new grain to insert
+         val minStart = matches.map(grain => grain.start).min
+         val maxEnd = matches.map(grain => grain.end).max
+
+         // remove grains contained in matches
+         val newList = list.filter(keep => keep.end < minStart ||
+                                    keep.start > maxEnd)
+
+         // produce the new list
+         new GrainList(Grain(minStart, maxEnd)::newList)
       }
       else{
          // just add the grain passed as argument
@@ -126,7 +134,7 @@ case class GrainList(list: List[Grain]) extends Iterable[Grain]{
     */
    override def toString: String = {
       val string1 = "GrainList( "
-      val string2 = string1 + list.map(grain => grain.toString).mkString(" ")
+      val string2 = string1 + list.sorted.map(grain => grain.toString).mkString(" ")
       string2
    }
 

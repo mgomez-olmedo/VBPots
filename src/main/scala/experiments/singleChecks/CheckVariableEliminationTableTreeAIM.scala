@@ -10,7 +10,7 @@ import potential.{OperatorType, ValueStoreTypes}
  */
 object CheckVariableEliminationTableTreeAIM extends App{
    // define the net name to propagate
-   var netName = "alarm"
+   var netName = "asia"
    var extension="net"
 
    // creates the Bnet

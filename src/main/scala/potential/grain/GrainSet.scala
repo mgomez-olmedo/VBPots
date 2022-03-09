@@ -10,7 +10,7 @@ import scala.collection.immutable.TreeSet
  * @constructor creates a new object using the arguments
  * @param set TreeSet of grains with the content of object
  */
-case class GrainSet(set: TreeSet[Grain]) {
+case class GrainSet(set: TreeSet[Grain]) extends Iterable[Grain]{
    /**
     * adds a new index to the list
     *
@@ -31,6 +31,33 @@ case class GrainSet(set: TreeSet[Grain]) {
          val filtered: TreeSet[Grain] =
                   set.filter(target => target != grain)
          GrainSet(filtered + newGrain)
+      }
+   }
+
+   /**
+    * adds a new grain to the set
+    * @param grain
+    * @return
+    */
+   def addGrain(grain : Grain) : GrainSet = {
+      val matches = set.filter(grainPresent => grainPresent.isConsecutiveGrain(grain)) + grain
+
+      // add the grain taking into account the matches
+      if(!matches.isEmpty){
+         // detect limits for the new grain to insert
+         val minStart = matches.map(grain => grain.start).min
+         val maxEnd = matches.map(grain => grain.end).max
+
+         // remove grains contained in matches
+         val newSet = set.filter(keep => keep.end < minStart ||
+            keep.start > maxEnd)
+
+         // produce the new list
+         new GrainSet(newSet + Grain(minStart, maxEnd))
+      }
+      else{
+         // just add the grain passed as argument
+         new GrainSet(set + grain)
       }
    }
 
@@ -103,5 +130,24 @@ case class GrainSet(set: TreeSet[Grain]) {
       val string2 = string1 + set.map(grain => grain.toString).
                   mkString(" ") + ")\n"
       string2
+   }
+
+   /**
+    * Makes class iterable
+    * @return
+    */
+   override def iterator: Iterator[Grain] = set.iterator
+}
+
+/**
+ * companion object of the class
+ */
+object GrainSet{
+   def merge(grains1 : GrainSet, grains2 : GrainSet) : GrainSet = {
+      var result = grains1
+      grains2.foreach(grain => result = result.addGrain(grain))
+
+      // return result
+      result
    }
 }

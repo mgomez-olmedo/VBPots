@@ -82,7 +82,7 @@ case class VDISMStore(variables: VariableSet,
     * @return list of different values
     */
    override def getDifferentValues: List[Double] = {
-      Util.DEFAULTVALUE :: map.keySet.toList
+      map.keySet.toList.sorted
    }
 
    /**
@@ -251,21 +251,34 @@ case class VDISMStore(variables: VariableSet,
       VDISMStore.marginalizeAlt2)
 
    /**
-    * Abstract method for pruning
-    *
-    * @param threshold maximum loss of entropy
-    * @return
-    */
-   override def prune(threshold: Double): ValueDrivenStore = ???
-
-   /**
     * merge two entries of the store producing a new one
     *
     * @param value1
     * @param value2
     * @return
     */
-   override def merge(value1: Double, value2: Double): ValueDrivenStore = ???
+   override def merge(value1: Double, value2: Double): ValueDrivenStore = {
+      val data1 = computeSumAndSizeForValue(value1)
+      val data2 = computeSumAndSizeForValue(value2)
+      val newValue = (data1._1 + data2._1) / (data1._2 + data2._2)
+
+      // gets both list of grains
+      val indices1 = map.get(value1).get
+      val indices2 = map.get(value2).get
+
+      // merge both list of indices
+      val indices: Set[Long] = indices1 ++ indices2
+
+      // update the map removing merged entries
+      map -= value1
+      map -= value2
+
+      // add a new entry with indices and the new value
+      map += (newValue -> indices)
+
+      // return this
+      this
+   }
 }
 
 /**

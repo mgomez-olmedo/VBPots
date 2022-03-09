@@ -4,6 +4,7 @@ import base.{Variable, VariableSet}
 import potential._
 import utils.{DataSizes, Util}
 
+import scala.+:
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -266,21 +267,43 @@ case class IDPIStore(variables: VariableSet,
       IDPIStore.marginalizeDefault)
 
    /**
-    * Abstract method for pruning
-    *
-    * @param threshold maximum loss of entropy
-    * @return
-    */
-   override def prune(threshold: Double): ValueDrivenStore = ???
-
-   /**
     * merge two entries of the store producing a new one
     *
     * @param value1
     * @param value2
     * @return
     */
-   override def merge(value1: Double, value2: Double): ValueDrivenStore = ???
+   override def merge(value1: Double, value2: Double): ValueDrivenStore = {
+      val data1 = computeSumAndSizeForValue(value1)
+      val data2 = computeSumAndSizeForValue(value2)
+      val newValue = (data1._1 + data2._1) / (data1._2 + data2._2)
+
+      // gets the positions of data1 and data2 in the array
+      // of values
+      val value1Index = values.indexWhere(_ == value1, 0)
+      val value2Index = values.indexWhere(_ == value2, 0)
+
+      // add a new value to the array of values
+      var newValues = values :+ newValue
+
+      // remove value1 and value2
+      newValues = newValues.filter(value => value != value1 && value != value2)
+
+      // gets the index of the new value
+      val newValueIndex = newValues.indexWhere(_ == newValue, 0).toLong
+
+      // update entries in the array changing values related to
+      // value1Index and value2Index by newValueIndex
+      val newIndices: Array[(Long, Long)] = indices.map(entry => {
+         if(entry._2 == value1Index) (entry._1 -> newValueIndex)
+         else
+            if(entry._2 == value2Index) (entry._1 -> newValueIndex)
+            else (entry._1 -> entry._2)
+      })
+
+      // creates a new object
+      new IDPIStore(variables, newIndices, newValues)
+   }
 }
 
 /**

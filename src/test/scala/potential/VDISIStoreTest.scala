@@ -3,9 +3,9 @@ package potential
 import base.{Variable, VariableSet}
 import bnet.Bnet
 import org.scalatest.FunSuite
-import potential.valueBased.{VDGLStore, VDILIStore, VDILMStore}
+import potential.valueBased.{VDGLStore, VDILIStore, VDISIStore}
 
-class VDILMStoreTest extends FunSuite {
+class VDISIStoreTest extends FunSuite{
    // creates variables for domains
    val variable1 = new Variable("X1", List("x11", "x12"))
    val variable2 = new Variable("X2", List("x21", "x22", "x23"))
@@ -19,7 +19,7 @@ class VDILMStoreTest extends FunSuite {
       0.8, 0.2, 0.2, 0.8, 0.9, 0.1)
 
    // creates the store
-   val store = VDILMStore(variableSet1, values1)
+   val store = VDISIStore(variableSet1, values1)
 
    // just print the store
    println(store)
@@ -31,24 +31,20 @@ class VDILMStoreTest extends FunSuite {
     * stored values
     */
    test("checks merge of two values") {
-      // as the mthod will modify store, gets initially the number
-      // of values
-      val initialNumberValues = store.getDifferentValues.length
-
       // check the method for merging two values
       val merged = store.merge(0.9, 1)
       println()
       println("Store after merging..............")
       println(merged)
       val different = merged.getDifferentValues.length
-      assert(different == initialNumberValues - 1)
+      assert(different == store.getDifferentValues.length-1)
    }
 
    /**
     * test of prune operation on the store created at the
     * beginning
     */
-   test("checks prune operation for artificial potential") {
+   test("checks prune operation for artificial potential"){
       println()
       println("start of prune check")
       println(store)
@@ -61,7 +57,7 @@ class VDILMStoreTest extends FunSuite {
     * test for making a prune operation on a real potential from
     * a bnlearn network
     */
-   test("test of prune on potential of hepar2 potential") {
+   test("test of prune on potential of hepar2 potential"){
       // creates the net
       val net = Bnet("pathfinder.net")
 

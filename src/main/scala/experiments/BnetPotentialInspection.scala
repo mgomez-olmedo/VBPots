@@ -121,8 +121,8 @@ object BnetPotentialInspection extends App{
      * The last argument is a list of types: in this case a single
      * one
      */
-   val inspector = new BnetPotentialInspection("barley",
-                     "net", "ngodn",
+   val inspector = new BnetPotentialInspection("hepar2",
+                     "net", "ggtp",
                      listAlternatives)
 
    // call generateInfo method

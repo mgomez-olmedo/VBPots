@@ -878,5 +878,5 @@ object BnetAnalysis{
  */
 object ExampleAnalysys extends App{
    // just perform the analysis of interest
-   print(BnetAnalysis.singleAnalysis("barley.net","data/bnlearn/"))
+   print(BnetAnalysis.singleAnalysis("alarm.net","data/bnlearn/"))
 }

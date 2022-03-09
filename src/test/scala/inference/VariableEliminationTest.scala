@@ -14,17 +14,20 @@ class VariableEliminationTest extends FunSuite{
    val bnet = Bnet(netName + "." + extension)
    val refEngine=new VariableElimination(bnet, false)
    refEngine.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)
-   val refSolution = refEngine.propagate
+   val refSolution = refEngine.propagate("dysp")
+   println("reference solution: ")
+   println(refSolution)
+   println("---------------------------------------------")
 
    // creates engines for trees and AIMStore
    val treeEngine=new VariableElimination(
       Bnet.convert(bnet, ValueStoreTypes.TREE), false)
-   val aimEngine = new VariableElimination(
-      Bnet.convert(bnet, ValueStoreTypes.IDPMSTORE), false)
-   val asimEngine = new VariableElimination(
-      Bnet.convert(bnet, ValueStoreTypes.IDSMSTORE), false)
-   val mlimEngine = new VariableElimination(
+   val vdilmstore = new VariableElimination(
       Bnet.convert(bnet, ValueStoreTypes.VDILMSTORE), false)
+   val idsmStore = new VariableElimination(
+      Bnet.convert(bnet, ValueStoreTypes.IDSMSTORE), false)
+   val idmmstore = new VariableElimination(
+      Bnet.convert(bnet, ValueStoreTypes.IDMMSTORE), false)
 
    /**
     * method for comparing the results of two propagations
@@ -43,7 +46,7 @@ class VariableEliminationTest extends FunSuite{
          if(comparison == false){
             println("ref potential---------------------------")
             println(potential)
-            println("tree potential--------------------------")
+            println("alternative potential--------------------------")
             println(potTree)
             println("----------------------------------------")
          }
@@ -55,18 +58,50 @@ class VariableEliminationTest extends FunSuite{
       res.isEmpty
    }
 
+   /**
+    * method for comparing the result of two propagations producing
+    * a single potential
+    * @param refPots potentials of the reference solution
+    * @param altPots potentials of the alternative solution
+    */
+   def compareResults(refPot : Potential, altPot : Potential) : Boolean = {
+         // now check the equality of both potential
+         val comparison = (refPot == altPot)
+         if(comparison == false){
+            println("ref potential---------------------------")
+            println(refPot)
+            println("alternative potential--------------------------")
+            println(altPot)
+            println("----------------------------------------")
+         }
+
+      // return the result of comparison (empty list or with
+      // content in case of differences)
+      comparison
+   }
+
    // test evaluation with tree
    test("comparison with trees") {
-      val testEngine = new VariableElimination(
-         Bnet.convert(bnet, ValueStoreTypes.TREE), false)
-      testEngine.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)
-      val treeSolution = testEngine.propagate
+      treeEngine.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)
+      val treeSolution = treeEngine.propagate("dysp")
 
       // the test is ok if all the potentials are the same
       // ans res is empty
       assert(compareResults(refSolution, treeSolution))
    }
 
+   // test evaluation with AIMStore
+   test("comparison with IDMMSTORE") {
+      idmmstore.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)
+      val alternativeSolution = idmmstore.propagate("dysp")
+
+      // the test is ok if all the potentials are the same
+      // ans res is empty
+      assert(compareResults(refSolution, alternativeSolution))
+   }
+
+
+   /*
    // test with AIMStore and several operator types
    var combiners = List(OperatorType.DEFAULT, OperatorType.ALT1, OperatorType.ALT2,
       OperatorType.ALT3, OperatorType.ALT4)
@@ -112,5 +147,5 @@ class VariableEliminationTest extends FunSuite{
          // check solutions
          assert(compareResults(refSolution, altSolution))
       }
-   }
+   }*/
 }

@@ -261,15 +261,7 @@ object CombineMapper {
     */
    def apply(variableSet1: VariableSet, variableSet2: VariableSet):
                                                       CombineMapper = {
-      // Gets the potential with bigger domain
-      val variables = if (variableSet1.getSize >= variableSet2.getSize) {
-         (variableSet1, variableSet2)
-      }
-      else {
-         (variableSet2, variableSet1)
-      }
-
-      //new CombineMapper(variables._1, variables._2)
-      new CombineMapper(variables._1, variables._2)
+      // just creates the mapper
+      new CombineMapper(variableSet1, variableSet2)
    }
 }

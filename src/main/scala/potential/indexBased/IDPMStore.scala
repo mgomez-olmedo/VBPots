@@ -354,21 +354,44 @@ case class IDPMStore(variables: VariableSet,
       IDPMStore.marginalizeAlt3)
 
    /**
-    * Abstract method for pruning
-    *
-    * @param threshold maximum loss of entropy
-    * @return
-    */
-   override def prune(threshold: Double): ValueDrivenStore = ???
-
-   /**
     * merge two entries of the store producing a new one
     *
     * @param value1
     * @param value2
     * @return
     */
-   override def merge(value1: Double, value2: Double): ValueDrivenStore = ???
+   override def merge(value1: Double, value2: Double): ValueDrivenStore = {
+      val data1 = computeSumAndSizeForValue(value1)
+      val data2 = computeSumAndSizeForValue(value2)
+      val newValue = (data1._1 + data2._1) / (data1._2 + data2._2)
+
+      // gets the positions of data1 and data2 in the array
+      // of values
+      val value1Index = values.indexWhere(_ == value1, 0)
+      val value2Index = values.indexWhere(_ == value2, 0)
+
+      // add a new value to the array of values
+      values += newValue
+
+      // remove value1 and value2
+      values -= value1
+      values -= value2
+
+      // gets the index of the new value
+      val newValueIndex = values.indexWhere(_ == newValue, 0)
+
+      // update entries in the map changing values related to
+      // value1Index and value2Index by newValueIndex
+      indices.map(entry => {
+         if(entry._2 == value1Index) (entry._1 -> newValueIndex)
+         else
+            if(entry._2 == value2Index) (entry._1 -> newValueIndex)
+            else entry
+      })
+
+      // return this
+      this
+   }
 }
 
 /** ********************************************************* */

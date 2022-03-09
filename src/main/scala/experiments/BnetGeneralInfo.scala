@@ -1,14 +1,18 @@
 package experiments
 
 import bnet.Bnet
+import potential.ValueStoreTypes
 
 import java.nio.file.{Files, Paths}
 
+/**
+ * Object for making a general inspection on a network
+ */
 object BnetGeneralInfo extends App{
    // define the properties of the network to analyze
-   val folder="./data/UAI/selected/"
-   val netName="BN_109"
-   val extension="uai"
+   val folder="./data/bnlearn/"
+   val netName="pathfinder"
+   val extension="net"
 
    /**
     * Read the data of a net
@@ -63,6 +67,14 @@ object BnetGeneralInfo extends App{
       val numberParameters = bnet.potentials.
          map(potential => potential.variables.possibleValues).sum
       println("global number of parameters: " + numberParameters)
+
+      // gets the potential of maximum size
+      val potMaxSize = bnet.potentials.maxBy(potential => potential.store.getSize._1)
+      println("potential of max size: ")
+      println("   variable: " + potMaxSize.mainVariable)
+      println("   max number of values: " + potMaxSize.store.getSize._1)
+      println("   number of stored values: " + potMaxSize.store.getSize._2)
+      println("   number of different values: " + potMaxSize.store.getSize._3)
    }
 
    /**
@@ -73,10 +85,18 @@ object BnetGeneralInfo extends App{
       // iterates on potentials
       bnet.potentials.foreach(potential => {
          println("****************** " + potential.mainVariable + "******************")
+         println(potential.convert(ValueStoreTypes.VDGLSTORE))
          println("Conditioning vars: " + potential.conditioningVars.mkString(" "))
          println("Possible values: " + potential.variables.possibleValues)
          println("Number of different values: " + potential.store.getDifferentValues.length)
          println("Top 10 most repetaed values: " + potential.store.getDifferentValues.take(10))
       })
    }
+
+   /**
+    * executes a single analysis on a net
+    */
+   val net = readNetData(folder, netName, extension)
+   showBasicInfo(net)
+   showValuesPatterns(net)
 }

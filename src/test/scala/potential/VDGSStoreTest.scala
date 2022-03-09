@@ -3,7 +3,7 @@ package potential
 import base.{Variable, VariableSet}
 import bnet.Bnet
 import org.scalatest.FunSuite
-import potential.valueBased.VDGLStore
+import potential.valueBased.{VDGLStore, VDGSStore}
 
 class VDGSStoreTest extends FunSuite{
    // creates variables for domains
@@ -19,7 +19,7 @@ class VDGSStoreTest extends FunSuite{
       0.8, 0.2, 0.2, 0.8, 0.9, 0.1)
 
    // creates the store
-   val store = VDGLStore(variableSet1, values1)
+   val store = VDGSStore(variableSet1, values1)
 
    // just print the store
    println(store)
@@ -48,7 +48,7 @@ class VDGSStoreTest extends FunSuite{
       println()
       println("start of prune check")
       println(store)
-      val result = store.prune(0.05)
+      val result: ValueDrivenStore = store.prune(0.05)
       println("result of pruning")
       println(result)
    }

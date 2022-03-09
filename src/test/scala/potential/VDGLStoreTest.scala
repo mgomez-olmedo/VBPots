@@ -1,6 +1,7 @@
 package potential
 
 import base.{Variable, VariableSet}
+import bnet.Bnet
 import org.scalatest.FunSuite
 import potential.valueBased.VDGLStore
 
@@ -23,4 +24,55 @@ class VDGLStoreTest extends FunSuite{
    // just print the store
    println(store)
    println(store.map.keys.toList.sorted)
+   println("----- end of test setup -----------------")
+
+   /**
+    * checks the merge operation reduced the number of
+    * stored values
+    */
+   test("checks merge of two values") {
+      // check the method for merging two values
+      val merged = store.merge(0.9, 1)
+      println()
+      println("Store after merging..............")
+      println(merged)
+      val different = merged.getDifferentValues.length
+      assert(different == store.getDifferentValues.length-1)
+   }
+
+   /**
+    * test of prune operation on the store created at the
+    * beginning
+    */
+   test("checks prune operation for artificial potential"){
+      println()
+      println("start of prune check")
+      println(store)
+      val result = store.prune(0.05)
+      println("result of pruning")
+      println(result)
+   }
+
+   /**
+    * test for making a prune operation on a real potential from
+    * a bnlearn network
+    */
+   test("test of prune on potential of hepar2 potential"){
+      // creates the net
+      val net = Bnet("pathfinder.net")
+
+      // gets the required potential
+      val basePotential = net.getPotentialForVariable("F39")
+
+      // convert it to VDGLStore
+      val store = basePotential.convert(ValueStoreTypes.VDGLSTORE).store.asInstanceOf[VDGLStore]
+      println("-------------------- original store -----------------")
+      println(store)
+      println(".....................................................")
+
+      // just prune with a low threshold
+      val result = store.prune(0.1)
+      println("-------------------- pruned store -------------------")
+      print(result)
+   }
 }
