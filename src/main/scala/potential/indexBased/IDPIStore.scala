@@ -78,7 +78,7 @@ case class IDPIStore(variables: VariableSet,
     * @return list of different values
     */
    override def getDifferentValues: List[Double] = {
-      Util.DEFAULTVALUE :: values.toList
+      values.toList.sorted
    }
 
    /**
@@ -299,31 +299,28 @@ case class IDPIStore(variables: VariableSet,
       val data2 = computeSumAndSizeForValue(value2)
       val newValue = (data1._1 + data2._1) / (data1._2 + data2._2)
 
-      // gets the positions of data1 and data2 in the array
-      // of values
-      val value1Index = values.indexWhere(_ == value1, 0)
-      val value2Index = values.indexWhere(_ == value2, 0)
+      // creates a new list of values
+      var newValues = ArrayBuffer[Double]()
+      newValues ++= values
+      newValues -= value1 -= value2 += newValue
+      newValues = newValues.sorted
 
-      // add a new value to the array of values
-      var newValues = values :+ newValue
-
-      // remove value1 and value2
-      newValues = newValues.filter(value => value != value1 && value != value2)
-
-      // gets the index of the new value
-      val newValueIndex = newValues.indexWhere(_ == newValue, 0).toLong
-
-      // update entries in the array changing values related to
-      // value1Index and value2Index by newValueIndex
-      val newIndices: Array[(Long, Long)] = indices.map(entry => {
-         if(entry._2 == value1Index) (entry._1 -> newValueIndex)
+      // gets the new positions for the map linking indices in
+      // potentials and indices in array of values
+      val newIndices = indices.map(entry => {
+         // gets the value for the index
+         val value = values(entry._2.toInt)
+         // gets the new index in newValues
+         val newIndex = newValues.indexWhere(_ == value, 0)
+         // return the new entry
+         if(newIndex != -1)
+            (entry._1, newIndex.toLong)
          else
-            if(entry._2 == value2Index) (entry._1 -> newValueIndex)
-            else (entry._1 -> entry._2)
+            (entry._1, newValues.indexWhere(_ == newValue, 0).toLong)
       })
 
       // creates a new object
-      new IDPIStore(variables, newIndices, newValues)
+      new IDPIStore(variables, newIndices, newValues.toArray)
    }
 }
 

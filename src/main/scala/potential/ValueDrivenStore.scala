@@ -127,9 +127,9 @@ trait ValueDrivenStore extends ValueStore {
       val size = sumSize1._2 + sumSize2._2
 
       // computes the difference and return it
-      Math.log10(size/sum)*sum -
-         Math.log10(sumSize1._2/sumSize1._1)*sumSize1._1 -
-         Math.log10(sumSize2._2/sumSize2._1)*sumSize2._1
+      math.log10(size/sum)*sum -
+         math.log10(sumSize1._2/sumSize1._1)*sumSize1._1 -
+         math.log10(sumSize2._2/sumSize2._1)*sumSize2._1
    }
 
    /**
