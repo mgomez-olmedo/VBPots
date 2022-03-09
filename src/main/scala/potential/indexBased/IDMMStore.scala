@@ -341,54 +341,29 @@ case class IDMMStore(variables: VariableSet,
       val data1 = computeSumAndSizeForValue(value1)
       val data2 = computeSumAndSizeForValue(value2)
       val newValue = (data1._1 + data2._1) / (data1._2 + data2._2)
-      println()
-      println("merge of " + value1 + " and " + value2)
-      println("complete array of values: " + values)
 
-      // gets the positions of data1 and data2 in the array
-      // of values
-      val value1Index = values.indexWhere(_ == value1, 0)
-      val value2Index = values.indexWhere(_ == value2, 0)
-      println("indices for values to merge: " + value1Index + " - " + value2Index)
-
-      var newValues = ArrayBuffer[Double](0)
-      newValues ++= values
-      newValues -= value1
-      newValues -= value2
-      newValues += newValue
+      // creates a new list of values
+      var newValues = values.clone
+      newValues -= value1 -= value2 += newValue
       newValues = newValues.sorted
 
-      // remove value1 and value2
-      values -= value1
-      values -= value2
-
-      // add a new value to the array of values
-      values += newValue
-      println()
-      println("new array of values:  " + values)
-
-      // gets the index of the new value
-      val newValueIndex = values.indexWhere(_ == newValue, 0)
-      println("new value index in array of values: " + newValueIndex)
-
-      val resultadoIndices = indices.map(entry => {
-         val indicePotencial = entry._1
-         val valor = values(entry._2.toInt)
-         val nuevoIndice = newValues.indexWhere(_ == valor, 0)
-         (indicePotencial -> nuevoIndice)
+      // gets the new positions for the map linking indices in
+      // potentials and indices in array of values
+      val newIndices = indices.map(entry => {
+         // gets the value for the index
+         val value = values(entry._2.toInt)
+         // gets the new index in newValues
+         val newIndex = newValues.indexWhere(_ == value, 0)
+         // return the new entry
+         if(newIndex != -1)
+            (entry._1, newIndex.toLong)
+         else
+            (entry._1, newValues.indexWhere(_ == newValue, 0).toLong)
       })
 
-      // update entries in the map changing values related to
-      // value1Index and value2Index by newValueIndex
-      val newIndices = indices.map(entry => {
-         if(entry._2 == value1Index || entry._2 == value2Index) (entry._1 -> newValueIndex.toLong)
-         else{
-            if(entry._2 >= value1Index && entry._2 >= value2Index) (entry._1, entry._2-1)
-            else entry
-         }
-       })
-      println("new map of pairs index in potential - index in values")
-      println(newIndices)
+      // change values content by the one in newValues
+      values.clear()
+      values ++= newValues
 
       // remove previous entries of the map
       indices.clear();

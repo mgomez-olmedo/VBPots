@@ -196,7 +196,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("list of indices (immutable) conversion "){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDILISTIMMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDILISTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {
@@ -226,7 +226,7 @@ class ConversionTest extends FunSuite {
 
    // test set of indices conversion representation
    test("list of indices (immutable) conversion 0D"){
-      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDILISTIMMUT)
+      val alternativeBnet = Bnet.convert(bnet, ValueStoreTypes.VDILISTORE)
 
       // gets the values for all the values of all potentials
       val resultPot = bnet.potentials.par.find(potential => {

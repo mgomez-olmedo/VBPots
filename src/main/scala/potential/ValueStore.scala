@@ -277,7 +277,7 @@ object ValueStore extends Combiner{
          case ValueStoreTypes.IDPMSTORE => IDPIStore(vars, values.toArray)
          case ValueStoreTypes.VDGSSTORE => VDGSStore(vars, values.toArray)
          case ValueStoreTypes.VDGLSTORE => VDGLStore(vars, values.toArray)
-         case ValueStoreTypes.VDILISTIMMUT => VDILIStore(vars, values.toArray)
+         case ValueStoreTypes.VDILISTORE => VDILIStore(vars, values.toArray)
          case ValueStoreTypes.VDILMSTORE => VDILMStore(vars, values.toArray)
          case ValueStoreTypes.VDISISTORE => VDISIStore(vars, values.toArray)
          case ValueStoreTypes.VDISMSTORE => VDISMStore(vars, values.toArray)

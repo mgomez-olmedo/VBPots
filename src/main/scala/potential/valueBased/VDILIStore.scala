@@ -26,7 +26,7 @@ case class VDILIStore(variables: VariableSet,
    /**
     * kind of storage
     */
-   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDILISTIMMUT
+   override val kind: ValueStoreTypes.Value = ValueStoreTypes.VDILISTORE
 
    /**
     * Gets the value for a corresponding index

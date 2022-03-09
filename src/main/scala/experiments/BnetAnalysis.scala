@@ -25,7 +25,7 @@ object ExperimentConfiguration{
       ValueStoreTypes.PRUNEDTREE,
       //ValueStoreTypes.MAPSETGRAIN,
       ValueStoreTypes.VDGLSTORE,
-      ValueStoreTypes.VDILISTIMMUT,
+      ValueStoreTypes.VDILISTORE,
       //ValueStoreTypes.MAPSETINDICESIMMUT,
       ValueStoreTypes.IDPISTORE,
       // ValueStoreTypes.IDSETIMMUT,
@@ -602,7 +602,7 @@ class BnetAnalysis(val folder: String, val netName: String,
       val representations = List(
          ValueStoreTypes.VDGSSTORE,
          ValueStoreTypes.VDGLSTORE,
-         ValueStoreTypes.VDILISTIMMUT,
+         ValueStoreTypes.VDILISTORE,
          ValueStoreTypes.VDISISTORE,
          ValueStoreTypes.IDPISTORE,
          ValueStoreTypes.IDSISTORE)

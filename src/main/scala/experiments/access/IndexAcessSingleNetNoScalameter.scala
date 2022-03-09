@@ -109,7 +109,7 @@ object IndexAccessSingleNoScalaMeter extends App{
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
       ValueStoreTypes.VDGLSTORE,
-      ValueStoreTypes.VDILISTIMMUT,
+      ValueStoreTypes.VDILISTORE,
       ValueStoreTypes.IDPISTORE,
       ValueStoreTypes.IDSISTORE,
       ValueStoreTypes.IDMMSTORE)

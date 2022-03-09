@@ -17,11 +17,11 @@ import scala.collection.parallel.ParMap
  * @constructor creates a new instance using the data
  *              passed as argument
  * @param variables domain of the related potential
- * @param indexesSet array of sets of indices
+ * @param arraySets array of sets of indices
  * @param values array of values
  */
 case class IDSMStore(variables: VariableSet,
-                     indexesSet: ArrayBuffer[Set[Long]],
+                     arraySets: ArrayBuffer[Set[Long]],
                      values: ArrayBuffer[Double]) extends ValueDrivenStore
                          with Combiner with Marginalizer {
 
@@ -40,8 +40,8 @@ case class IDSMStore(variables: VariableSet,
       IDSMStore.addGetValueCalls
 
       // find the index in the sets
-      val indexResult = indexesSet.indices.
-         find(indexInArray => indexesSet(indexInArray).
+      val indexResult = arraySets.indices.
+         find(indexInArray => arraySets(indexInArray).
                contains(index)).getOrElse(-1)
 
       // return the value stored in the corresponding
@@ -70,10 +70,10 @@ case class IDSMStore(variables: VariableSet,
       // if the value is already defined, add a new entry
       // to indices. In any other case it is needed to add
       // a new value
-      if (indexForValue != -1) indexesSet(indexForValue) += index
+      if (indexForValue != -1) arraySets(indexForValue) += index
       else {
          // creates a new set for the the value
-         indexesSet += Set(index)
+         arraySets += Set(index)
          values += value
       }
 
@@ -91,7 +91,7 @@ case class IDSMStore(variables: VariableSet,
       values += value
 
       // adds the set of indexes
-      indexesSet += indexes.toSet
+      arraySets += indexes.toSet
 
       // and return this in this case as well
       this
@@ -103,7 +103,7 @@ case class IDSMStore(variables: VariableSet,
     */
    override def split: List[ValueStore] = {
       values.indices.map(index => {
-         IDSMStore(variables, values(index), indexesSet(index))
+         IDSMStore(variables, values(index), arraySets(index))
       }).toList
    }
 
@@ -123,7 +123,7 @@ case class IDSMStore(variables: VariableSet,
     * @return list of different values
     */
    override def getDifferentValues: List[Double] = {
-      Util.DEFAULTVALUE :: values.toList
+      values.toList.sorted
    }
 
    /**
@@ -139,7 +139,7 @@ case class IDSMStore(variables: VariableSet,
 
       // now gets the indices pointing to this value
       val result = if (valueIndex != -1) {
-         indexesSet(valueIndex)
+         arraySets(valueIndex)
       }
       else {
          Set()
@@ -155,7 +155,7 @@ case class IDSMStore(variables: VariableSet,
     * @return list of indices stored
     */
    override def getIndices: List[Long] = {
-      indexesSet.flatMap(set => set.toList).toList
+      arraySets.flatMap(set => set.toList).toList
    }
 
 
@@ -172,7 +172,7 @@ case class IDSMStore(variables: VariableSet,
       // gets the number of indices related to values
       // different from 0
       val numberOfIndices =
-               indexesSet.map(set => set.size).sum
+               arraySets.map(set => set.size).sum
 
       // the complement is the number of 0's
       val numberZeros = size - numberOfIndices
@@ -192,7 +192,7 @@ case class IDSMStore(variables: VariableSet,
 
       // gets the counter of indices for each value
       val counters = (1 until values.length).map(
-         index => indexesSet(index).size
+         index => arraySets(index).size
       )
 
       // computes and return the proportions for each value
@@ -211,7 +211,7 @@ case class IDSMStore(variables: VariableSet,
    override def getSize: (Long, Long, Long) = {
       // determine the number of indices
       val numberIndices =
-                  indexesSet.map(set => set.size).sum
+                  arraySets.map(set => set.size).sum
 
       // return the tuple with possible values, number of
       // indices stored in the potential, number of values
@@ -233,7 +233,7 @@ case class IDSMStore(variables: VariableSet,
       output = output + variables.toString
       output = output + "Main variable: " + mainVariable.name
       output = output + "\nIndices and value indices: \n"
-      output = output + indexesSet.mkString("\n") + "\n"
+      output = output + arraySets.mkString("\n") + "\n"
       output = output + "Different values: " + values.mkString(" ") + "\n"
       output = output + "Default value: " + Util.DEFAULTVALUE + "\n"
       val size = getSize
@@ -257,7 +257,7 @@ case class IDSMStore(variables: VariableSet,
 
       // get size of indices
       val indicesSizes =
-               indexesSet.map(set => set.size).sum * DataSizes.LONG
+               arraySets.map(set => set.size).sum * DataSizes.LONG
 
       // get size of values: adds one to default value
       val valueSizes =
@@ -266,7 +266,7 @@ case class IDSMStore(variables: VariableSet,
       // considers the size of both arrays and a number
       // of sets equals to the length of the arrays
       val structuresSize =
-            DataSizes.ARRAY * 2 + DataSizes.SET * indexesSet.length
+            DataSizes.ARRAY * 2 + DataSizes.SET * arraySets.length
 
       // return the global sum
       variableSizes + indicesSizes + valueSizes + structuresSize
@@ -305,30 +305,36 @@ case class IDSMStore(variables: VariableSet,
       val data2 = computeSumAndSizeForValue(value2)
       val newValue = (data1._1 + data2._1) / (data1._2 + data2._2)
 
-      // gets the positions of data1 and data2 in the array
-      // of values
-      val value1Index = values.indexWhere(_ == value1, 0)
-      val value2Index = values.indexWhere(_ == value2, 0)
+      // gets a complete list of resultant values
+      var newValues = values.clone
+      newValues -= value1 -= value2 += newValue
+      newValues = newValues.sorted
 
-      // add a new value to the array of values
-      values += newValue
+      // updates correspondences betweeen indices in array of
+      // values and array of sets of indices
+      val newArraySets = new ArrayBuffer[Set[Long]](newValues.length)
+      (0 until newValues.length).foreach(index => newArraySets += Set[Long](0))
+      (0 until values.length).foreach(index => {
+         // two possible situations: unmerged values keeps their
+         // previous set of indices, with a new position
+         val value = values(index)
+         if(value != value1 && value != value2){
+            val newValueIndex = newValues.indexWhere(_ == values(index))
+            newArraySets(newValueIndex) = arraySets(index)
+         }
+      })
 
-      // remove value1 and value2
-      values -= value1
-      values -= value2
+      // now add the sets for the merged value
+      val newValueIndex = newValues.indexWhere(_ == newValue, 0)
+      val value1Index = values.indexWhere(_ == value1)
+      val value2Index = values.indexWhere(_ == value2)
+      newArraySets(newValueIndex) = arraySets(value1Index) ++ arraySets(value2Index)
 
-      // gets the index of the new value
-      val newValueIndex = values.indexWhere(_ == newValue, 0)
-
-      // join sets of indices for value1 and value2
-      val newSet = indexesSet(value1Index) ++ indexesSet(value2Index)
-
-      // remove entries for value1 and value2 indexes
-      indexesSet -= indexesSet(value1Index)
-      indexesSet -= indexesSet(value2Index)
-
-      // add a new position for the new value
-      indexesSet(newValueIndex) = newSet
+      // clear values and indixesSet in order to update their content
+      values.clear()
+      values ++= newValues
+      arraySets.clear()
+      arraySets ++= newArraySets
 
       // return this
       this

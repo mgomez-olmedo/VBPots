@@ -3,10 +3,9 @@ package potential
 import base.{Variable, VariableSet}
 import bnet.Bnet
 import org.scalatest.FunSuite
-import potential.indexBased.IDMMStore
-import potential.valueBased.{VDGLStore, VDILMStore}
+import potential.indexBased.{IDMMStore, IDSMStore}
 
-class IDMMStoreTest extends FunSuite {
+class IDSMStoreTest extends FunSuite {
    // creates variables for domains
    val variable1 = new Variable("X1", List("x11", "x12"))
    val variable2 = new Variable("X2", List("x21", "x22", "x23"))
@@ -20,7 +19,7 @@ class IDMMStoreTest extends FunSuite {
       0.8, 0.2, 0.2, 0.8, 0.9, 0.1)
 
    // creates the store
-   val store = IDMMStore(variableSet1, values1)
+   val store = IDSMStore(variableSet1, values1)
 
    // just print the store
    println(store)
@@ -70,7 +69,7 @@ class IDMMStoreTest extends FunSuite {
       val basePotential = net.getPotentialForVariable("F39")
 
       // convert it to VDGLStore
-      val store = basePotential.convert(ValueStoreTypes.IDMMSTORE).store.asInstanceOf[IDMMStore]
+      val store = basePotential.convert(ValueStoreTypes.IDSMSTORE).store.asInstanceOf[IDSMStore]
       println("-------------------- original store -----------------")
       println(store)
       println(".....................................................")

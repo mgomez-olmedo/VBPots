@@ -23,7 +23,7 @@ object ExtremeCaseAnalysis extends App{
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
       ValueStoreTypes.VDGLSTORE, // VDG
-      ValueStoreTypes.VDILISTIMMUT, // VDI
+      ValueStoreTypes.VDILISTORE, // VDI
       ValueStoreTypes.IDPISTORE, // IDP
       ValueStoreTypes.IDMMSTORE // IDM
    )
@@ -49,7 +49,7 @@ object ExtremeCaseAnalysis extends App{
    println(vdg)
 
    // convert into VDI
-   val vdi = example.potential.convert(ValueStoreTypes.VDILISTIMMUT)
+   val vdi = example.potential.convert(ValueStoreTypes.VDILISTORE)
    println(vdi)
 
    // convert into IPD

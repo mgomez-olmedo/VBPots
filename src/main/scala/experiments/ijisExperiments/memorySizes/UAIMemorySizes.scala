@@ -15,7 +15,7 @@ object UAIMemorySizes extends App{
       ValueStoreTypes.PRUNEDTREE,
       //ValueStoreTypes.MAPSETGRAIN,
       ValueStoreTypes.VDGLSTORE,
-      ValueStoreTypes.VDILISTIMMUT,
+      ValueStoreTypes.VDILISTORE,
       //ValueStoreTypes.MAPSETINDICESIMMUT,
       ValueStoreTypes.IDPISTORE,
       // ValueStoreTypes.IDSETIMMUT,

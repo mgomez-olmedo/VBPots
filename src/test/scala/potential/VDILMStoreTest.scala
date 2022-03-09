@@ -69,7 +69,7 @@ class VDILMStoreTest extends FunSuite {
       val basePotential = net.getPotentialForVariable("F39")
 
       // convert it to VDGLStore
-      val store = basePotential.convert(ValueStoreTypes.VDGLSTORE).store.asInstanceOf[VDGLStore]
+      val store = basePotential.convert(ValueStoreTypes.VDILMSTORE).store.asInstanceOf[VDILMStore]
       println("-------------------- original store -----------------")
       println(store)
       println(".....................................................")

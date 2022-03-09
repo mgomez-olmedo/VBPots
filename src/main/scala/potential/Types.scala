@@ -29,7 +29,7 @@ object ValueStoreTypes extends Enumeration{
       VDGSSTORE,    // Value based - map value - set of grains with indices
       VDGLSTORE,    // Value based - map value - list of grain with indices
       VDILMSTORE,   // Value based - map value - mutable list of indices
-      VDILISTIMMUT, // Value based - map value - immutable list of indices
+      VDILISTORE, // Value based - map value - immutable list of indices
       VDISMSTORE,   // Value based - map value - mutable set of indices
       VDISISTORE,   // Value based - map value - immutable set of indices
       IDPMSTORE,    // Index based - mutable array of values, array of pairs (indexp, indexv)

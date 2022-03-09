@@ -12,7 +12,7 @@ class IndexAccessTest extends FunSuite {
    // defines the representations to test (those used in IJIS paper)
    val representations = List(ValueStoreTypes.TABLE,
       ValueStoreTypes.VDGLSTORE,
-      ValueStoreTypes.VDILISTIMMUT,
+      ValueStoreTypes.VDILISTORE,
       ValueStoreTypes.IDPMSTORE,
       ValueStoreTypes.IDMMSTORE)
 

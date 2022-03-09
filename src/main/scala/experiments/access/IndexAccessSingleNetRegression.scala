@@ -15,7 +15,7 @@ object IndexAccessSingleNetRegression extends Bench.Regression {
       ValueStoreTypes.TREE,
       ValueStoreTypes.PRUNEDTREE,
       ValueStoreTypes.VDGLSTORE,
-      ValueStoreTypes.VDILISTIMMUT,
+      ValueStoreTypes.VDILISTORE,
       ValueStoreTypes.IDPISTORE,
       ValueStoreTypes.IDSISTORE,
       ValueStoreTypes.IDMMSTORE)

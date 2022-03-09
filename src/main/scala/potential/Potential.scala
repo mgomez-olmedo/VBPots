@@ -316,7 +316,7 @@ object Potential {
             IDSIStore(variableSet, valuesList.toArray)
          case ValueStoreTypes.IDSMSTORE =>
             IDSMStore(variableSet, valuesList.toArray)
-         case ValueStoreTypes.VDILISTIMMUT =>
+         case ValueStoreTypes.VDILISTORE =>
             VDILIStore(variableSet, valuesList.toArray)
          case ValueStoreTypes.VDILMSTORE =>
             VDILMStore(variableSet, valuesList.toArray)
