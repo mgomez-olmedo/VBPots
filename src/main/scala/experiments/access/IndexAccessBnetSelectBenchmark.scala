@@ -58,31 +58,6 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
    }
 
    /**
-    * prepares the access set for a given net
-    * @param bnet
-    * @param counter
-    * @return
-    */
-   def prepareAccessSet(bnet: Bnet, counter : Long ) : List[(Int, Long)] = {
-      // for each configuration select a potential at random
-      // and the corresponding index to access
-      val accessSet: List[(Int, Long)] = (0L until counter).map(index => {
-         // gets the index of the potential to access
-         val indexPotential = Random.nextInt(bnet.potentials.size)
-
-         // and generates a random index as well
-         val potentialSize = bnet.potentials(indexPotential.toInt).variables.possibleValues
-         val indexInPotential = Math.abs(Random.nextLong()) % potentialSize
-
-         // returns the tuple
-         (indexPotential, indexInPotential)
-      }).toList
-
-      // return the access set
-      accessSet
-   }
-
-   /**
     * measures the execution time for a given bnet using an
     * access set passed as argument
     * @param bnet
@@ -118,7 +93,7 @@ object IndexAccessBnetSelectBenchmark extends Bench.ForkedTime {
       numberIndexes += ((netName, numberConfigurations))
 
       // prepare access set
-      val accessSet = prepareAccessSet(bnet, numberConfigurations)
+      val accessSet = AccessSetUtils.prepareAccessSet(bnet, numberConfigurations)
 
       // compute access time
       var time = measureTime(bnet, accessSet)

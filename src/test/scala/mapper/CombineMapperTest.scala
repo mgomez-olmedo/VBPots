@@ -38,6 +38,13 @@ class CombineMapperTest extends FunSuite {
    // gets tge global domain
    val globalSet = mapper.resultDomain
    println("global domain: " + globalSet)
+   println("variables list: " + mapper.resultDomain.variableList)
+   print("weights in result: ")
+   mapper.resultDomainWeights.foreach(weight => print(weight + " "))
+   print("weights in pot1: ")
+   (mapper.weights)._1.foreach(weight => print(weight + " "))
+   print("weights in pot2: ")
+   (mapper.weights)._2.foreach(weight => print(weight + " "))
 
    /**
     * test compatibility function with positive result
@@ -73,7 +80,9 @@ class CombineMapperTest extends FunSuite {
       assert(mapper.compatible(index1, index2) == false)
    }
 
-
+   /**
+    * test indexes mapping
+    */
    test("test map indices") {
       // set values corresponding to index value of 133
       val globalConf = Configuration(globalSet)
@@ -93,6 +102,31 @@ class CombineMapperTest extends FunSuite {
       assert(mapper.mapIndices(globalIndex) == (index1, index2))
    }
 
+   /**
+    * test indexes mapping with alternative4
+    */
+   test("test map indices with alternative method") {
+      // set values corresponding to index value of 133
+      val globalConf = Configuration(globalSet)
+      val newConf = globalConf.setValues(Array(1, 2, 1, 1, 1))
+      val globalIndex = newConf.computeIndex
+
+      // creates configurations for partials
+      val conf1 = Configuration(partial1)
+      val newConf1 = conf1.setValues(Array(1, 2, 1, 1))
+      val index1 = newConf1.computeIndex
+
+      val conf2 = Configuration(partial2)
+      val newConf2 =  conf2.setValues(Array(1, 1, 1))
+      val index2 = newConf2.computeIndex
+
+      // check map of conf to conf1 and conf2
+      assert(mapper.mapIndices(globalIndex) == (index1, index2))
+   }
+
+   /**
+    * test indexed mapping from operands to result
+    */
    test("test map indices from operands to result") {
       // set values corresponding to index value of 129
       val globalConf = Configuration(globalSet)

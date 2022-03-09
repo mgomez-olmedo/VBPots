@@ -52,7 +52,7 @@ object PotentialsGeneration extends App {
     * extreme case
     * @return
     */
-   def generateIJISExample(percentage : Double) : Potential = {
+   def generateExtremeCasePotential(percentage : Double) : Potential = {
       // force seed for reproducing the experiment
       scala.util.Random.setSeed(0)
 

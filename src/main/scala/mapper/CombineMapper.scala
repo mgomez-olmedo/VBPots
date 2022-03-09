@@ -29,6 +29,11 @@ class CombineMapper(val operand1: VariableSet, val operand2: VariableSet) {
    val mapperInfo: Map[Variable, VariableInfo] = createInfo
 
    /**
+    * Stores weights of variables in operand1 and operand2
+    */
+   val weights: (Array[Long], Array[Long]) = computeWeights
+
+   /**
     * Stores a configuration for computing indexes
     */
    val resultConfiguration: Configuration = Configuration(resultDomain)
@@ -106,6 +111,32 @@ class CombineMapper(val operand1: VariableSet, val operand2: VariableSet) {
       // compute the coordinates for index
       val values = Configuration.computeCoordinates(resultDomain, index)
 
+      //val index1 = weights._1.zip(values).map(pair => pair._1*pair._2).sum
+      //val index2 = weights._2.zip(values).map(pair => pair._1*pair._2).sum
+
+      var index1 : Long = 0L
+      var index2 : Long = 0L
+      (0 until resultDomain.size).foreach(index => {
+         index1 = index1 + values(index)*weights._1(index)
+         index2 = index2 + values(index)*weights._2(index)
+      })
+
+      // return index1 and index2
+      (index1, index2)
+   }
+
+
+   /**
+    * maps the index passed as argument to the configurations
+    * represented with operand1 and operand2
+    *
+    * @param index index to map
+    * @return tuple with (index in conf1, index in conf2)
+    */
+   def mapIndices1(index : Long) : (Long, Long) = {
+      // compute the coordinates for index
+      val values = Configuration.computeCoordinates(resultDomain, index)
+
       // compute the indices in conf1 and conf2 from this
       (Configuration.computeIndex(resultDomain, values, operand1),
         Configuration.computeIndex(resultDomain, values, operand2))
@@ -167,8 +198,6 @@ class CombineMapper(val operand1: VariableSet, val operand2: VariableSet) {
       (index1, index2)
    }
 
-
-
    /**
     * maps the index passed as argument to the first operand potential
     *
@@ -229,6 +258,26 @@ class CombineMapper(val operand1: VariableSet, val operand2: VariableSet) {
                      weightInPot1, weightInPot2, weightInResult, 0))
       }).toMap
    }
+
+   /**
+    * private method for computing the weights of variables in operand
+    * potentials in order to speedup posterior indexes computation
+    * @return
+    */
+   private def computeWeights : (Array[Long], Array[Long]) = {
+      val weights1 = new Array[Long](resultDomain.size)
+      val weights2 = new Array[Long](resultDomain.size)
+
+      // considers each variable in mapperInfo
+      (0 until resultDomain.variableList.size).foreach(index => {
+         weights1(index) = mapperInfo.get(resultDomain.variableList(index)).get.weightInOperand1
+         weights2(index) = mapperInfo.get(resultDomain.variableList(index)).get.weightInOperand2
+      })
+
+      // return arrays of weights
+      (weights1, weights2)
+   }
+
 
    /**
     * Private class for storing info about the variables

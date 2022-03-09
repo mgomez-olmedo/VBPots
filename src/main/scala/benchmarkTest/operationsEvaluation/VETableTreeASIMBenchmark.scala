@@ -17,7 +17,7 @@ object VETableTreeASIMBenchmark extends App {
    val standardConfig = config(
       Key.exec.minWarmupRuns -> 20,
       Key.exec.maxWarmupRuns -> 40,
-      Key.exec.benchRuns -> 25,
+      Key.exec.benchRuns -> 100,
       Key.verbose -> false
    ) withWarmer new Warmer.Default
 

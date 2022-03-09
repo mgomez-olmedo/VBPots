@@ -86,6 +86,7 @@ object NetSerializator extends App{
       // compose the name for the serialized object
       val objectFileName =
          folder + netName + "-obj-" + representation.toString + "." + extension
+      println("reading object file name: " + objectFileName)
 
       // check if the folder and files are already present
       val folderReady = Files.exists(Paths.get(folder))
