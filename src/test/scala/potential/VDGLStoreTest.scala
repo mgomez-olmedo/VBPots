@@ -59,10 +59,10 @@ class VDGLStoreTest extends FunSuite{
     */
    test("test of prune on potential of hepar2 potential"){
       // creates the net
-      val net = Bnet("pathfinder.net")
+      val net = Bnet("alarm.net")
 
       // gets the required potential
-      val basePotential = net.getPotentialForVariable("F74")
+      val basePotential = net.getPotentialForVariable("CATECHOL")
 
       // convert it to VDGLStore
       val store = basePotential.convert(ValueStoreTypes.VDGLSTORE).store.asInstanceOf[VDGLStore]

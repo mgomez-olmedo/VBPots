@@ -64,10 +64,10 @@ class IDPIStoreTest extends FunSuite {
     */
    test("test of prune on potential of hepar2 potential") {
       // creates the net
-      val net = Bnet("pathfinder.net")
+      val net = Bnet("hepar2.net")
 
       // gets the required potential
-      val basePotential = net.getPotentialForVariable("F39")
+      val basePotential = net.getPotentialForVariable("ggtp")
 
       // convert it to VDGLStore
       val store = basePotential.convert(ValueStoreTypes.IDPISTORE).store.asInstanceOf[IDPIStore]
@@ -75,9 +75,14 @@ class IDPIStoreTest extends FunSuite {
       println(store)
       println(".....................................................")
 
-      // just prune with a low threshold
-      val result = store.prune(0.1)
-      println("-------------------- pruned store -------------------")
-      print(result)
+      // sets the values of threshold to consider
+      val thresholds = List(0.0001, 0.001, 0.005, 0.01, 0.05, 0.1)
+
+      thresholds.foreach(threshold => {
+         // just prune with a low threshold
+         val result = store.prune(threshold)
+         println("-------------------- pruned store " + threshold + " -------------------")
+         println(result)
+      })
    }
 }

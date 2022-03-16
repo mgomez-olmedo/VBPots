@@ -10,9 +10,9 @@ import java.nio.file.{Files, Paths}
  */
 object BnetGeneralInfo extends App{
    // define the properties of the network to analyze
-   val folder="./data/UAI/"
-   val netName="BN_76"
-   val extension="uai"
+   val folder="./data/bnlearn/"
+   val netName="pigs"
+   val extension="net"
 
    /**
     * Read the data of a net
