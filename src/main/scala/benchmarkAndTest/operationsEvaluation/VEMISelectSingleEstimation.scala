@@ -1,4 +1,4 @@
-package benchmarkTest.operationsEvaluation
+package benchmarkAndTest.operationsEvaluation
 
 import bnet.Bnet
 import inference.VariableElimination

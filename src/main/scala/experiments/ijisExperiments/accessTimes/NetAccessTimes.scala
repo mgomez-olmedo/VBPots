@@ -1,6 +1,6 @@
 package experiments.ijisExperiments.accessTimes
 
-import experiments.access.IndexAccessBnetSelectBenchmark
+import benchmarkAndTest.benchmarkAccessTimes.IndexAccessBnetSelectBenchmark
 
 /**
  * Object for generating the results for access times experiment

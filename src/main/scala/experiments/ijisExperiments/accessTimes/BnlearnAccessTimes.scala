@@ -1,6 +1,6 @@
 package experiments.ijisExperiments.accessTimes
 
-import experiments.access.IndexAccessBnetSelectBenchmark
+import benchmarkAndTest.benchmarkAccessTimes.IndexAccessBnetSelectBenchmark
 import experiments.serializeNets.NetSerializator
 
 /**

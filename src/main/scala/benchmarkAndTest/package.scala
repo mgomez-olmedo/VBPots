@@ -3,5 +3,5 @@
   * potentials via Variable Elimination algorithm
   */
 
-package object benchmarkTest {
+package object benchmarkAndTest {
 }

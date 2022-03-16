@@ -1,4 +1,4 @@
-package experiments.access
+package benchmarkAndTest.benchmarkAccessTimes
 
 import base.Configuration
 import experiments.generation.IndexesList

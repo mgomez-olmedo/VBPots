@@ -1,8 +1,8 @@
-package benchmarkTest.operationsEvaluation
+package benchmarkAndTest.operationsEvaluation
 
 import bnet.Bnet
 import inference.VariableElimination
-import potential.OperatorType
+import potential.{OperatorType, ValueStoreTypes}
 
 /**
  * Object to perform comparisons in the application of
@@ -10,7 +10,7 @@ import potential.OperatorType
  * selecting network, extension, alternatives for combination
  * and marginalization and seed for variables selection
  */
-object VETableSelectSingleEstimation extends App {
+object VETreeSelectSingleEstimation extends App {
    /**
     * propagate with an engine and a certain number of variables
     * @param engine
@@ -50,13 +50,15 @@ object VETableSelectSingleEstimation extends App {
    println("variables to propagate:  " + variableIndexes.
       map(bnet.variables.getVariable(_).name).mkString(" "))
 
-   // creates engine for tables
-   var engine=new VariableElimination(bnet,false)
+   // creates a engine for tree
+   val bnetTree = Bnet.convert(bnet, ValueStoreTypes.TREE)
+   var engine = new VariableElimination(bnetTree, false)
 
-   // propagation with CPTs
+   // propagation with trees
    engine.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)
    var time1 = System.currentTimeMillis()
    propagate(engine, variableIndexes)
    var time2 = System.currentTimeMillis()
-   println("table time: " + (time2 - time1))
+   println("tree time: " + (time2 - time1))
+
 }

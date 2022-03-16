@@ -1,4 +1,4 @@
-package experiments.access
+package benchmarkAndTest.benchmarkAccessTimes
 
 import bnet.Bnet
 import experiments.serializeNets.NetSerializator

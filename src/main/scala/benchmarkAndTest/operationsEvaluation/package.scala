@@ -1,4 +1,4 @@
-package benchmarkTest
+package benchmarkAndTest
 
 /**
  * Package with classes intended for benchmarking several

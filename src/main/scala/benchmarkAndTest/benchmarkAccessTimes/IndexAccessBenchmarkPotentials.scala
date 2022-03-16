@@ -1,4 +1,4 @@
-package experiments.access
+package benchmarkAndTest.benchmarkAccessTimes
 
 import experiments.generation.IndexesList
 import org.scalameter.{Key, Warmer, config}
