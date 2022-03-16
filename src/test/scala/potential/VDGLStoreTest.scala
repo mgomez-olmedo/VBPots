@@ -62,7 +62,7 @@ class VDGLStoreTest extends FunSuite{
       val net = Bnet("pathfinder.net")
 
       // gets the required potential
-      val basePotential = net.getPotentialForVariable("F39")
+      val basePotential = net.getPotentialForVariable("F74")
 
       // convert it to VDGLStore
       val store = basePotential.convert(ValueStoreTypes.VDGLSTORE).store.asInstanceOf[VDGLStore]
@@ -70,9 +70,14 @@ class VDGLStoreTest extends FunSuite{
       println(store)
       println(".....................................................")
 
-      // just prune with a low threshold
-      val result = store.prune(0.1)
-      println("-------------------- pruned store -------------------")
-      print(result)
+      // sets the values of threshold to consider
+      val thresholds = List(0.0001, 0.001, 0.005, 0.01, 0.05, 0.1)
+
+      thresholds.foreach(threshold => {
+         // just prune with a low threshold
+         val result = store.prune(threshold)
+         println("-------------------- pruned store " + threshold + " -------------------")
+         print(result)
+      })
    }
 }

@@ -10,9 +10,9 @@ import java.nio.file.{Files, Paths}
  */
 object BnetGeneralInfo extends App{
    // define the properties of the network to analyze
-   val folder="./data/bnlearn/"
-   val netName="pathfinder"
-   val extension="net"
+   val folder="./data/UAI/"
+   val netName="BN_76"
+   val extension="uai"
 
    /**
     * Read the data of a net
@@ -67,6 +67,15 @@ object BnetGeneralInfo extends App{
       val numberParameters = bnet.potentials.
          map(potential => potential.variables.possibleValues).sum
       println("global number of parameters: " + numberParameters)
+
+      // gets the top 10 biggest potentials
+      val potsInfo = bnet.potentials.
+         map(potential => (potential.mainVariable, potential.store.getSize)).
+         sortBy(_._2._1).reverse.take(10)
+      potsInfo.foreach(potInfo => {
+         println("   variable: " + potInfo._1 + " max: " + potInfo._2._1 +
+            " stored: " + potInfo._2._2 + " dif: "+ potInfo._2._3)
+      })
 
       // gets the potential of maximum size
       val potMaxSize = bnet.potentials.maxBy(potential => potential.store.getSize._1)
