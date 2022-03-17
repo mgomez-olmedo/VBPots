@@ -4,9 +4,10 @@ import java.io._
 import base.{Variable, VariableSet}
 import graph.Graph
 import parser.{BnetParser, UAIDirectParsing, UAINetParser}
-import potential.{Potential, ValueStoreTypes}
+import potential.{Potential, ValueDrivenStore, ValueStore, ValueStoreTypes}
 import utils.{DataSizes, Serializator}
 
+import scala.collection.mutable.ListBuffer
 import scala.util.Random
 
 /**
@@ -41,6 +42,52 @@ class Bnet(val name: String, val variables: VariableSet,
     */
    def getPotentialForVariable(variableName: String): Potential = {
       getPotentialForVariable(variables.getVariable(variableName))
+   }
+
+   /**
+    * change the store of a potential for a given variable in order to introduce
+    * a new one in its place (as a result of pruning. for example)
+    * @param variableName
+    */
+   def changePotentialForVariable(variableName : String, newStore : ValueStore) : Bnet = {
+      // filter the potential to remove the one corresponding to
+      // variableName
+      val filtered = potentials.filter(potential => potential.mainVariable.name != variableName)
+
+      // creates a new potential for the store
+      val newPotential = new Potential(newStore)
+
+      // makes a new Bnet
+      Bnet(name, variables, newPotential :: filtered)
+   }
+
+   /**
+    * method for pruning potentials using a certain threshold
+    * NOTE: this method must be used only for nets where potentials
+    * have stores of ValueDrivenStore type
+    * @param threshold
+    * @return
+    */
+   def prune(threshold : Double) : Bnet = {
+      // check of the prune can be performed
+      val check = potentials(0).store.isInstanceOf[ValueDrivenStore]
+
+      // perform the prune operation if needed
+      if(check){
+         val newPotentials = potentials.map(potential => {
+            val store = potential.store.asInstanceOf[ValueDrivenStore]
+            val newStore = store.prune(threshold)
+            new Potential(newStore)
+         })
+
+         // compose the new net
+         Bnet(name, variables, newPotentials)
+      }
+      else{
+         // shows an error message and return null
+         println("Prune operation not allowed on Tables or Trees")
+         null
+      }
    }
 
    /**
@@ -182,6 +229,8 @@ object Bnet {
     */
    def apply(netName: String, variableSet: VariableSet,
              potentialsList: List[Potential]): Bnet = {
+
+      // new creates the object
       new Bnet(netName, variableSet, potentialsList)
    }
 

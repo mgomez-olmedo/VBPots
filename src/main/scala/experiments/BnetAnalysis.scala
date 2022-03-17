@@ -9,7 +9,7 @@ import potential.valueBased.{VDGLStore, VDGSStore}
 import potential.{Potential, TreeStore, ValueStoreTypes}
 
 import scala.collection.mutable
-import scala.collection.mutable.Map
+import scala.collection.mutable.{ListBuffer, Map}
 
 /**
   * Object for storing the configuration of the experiment

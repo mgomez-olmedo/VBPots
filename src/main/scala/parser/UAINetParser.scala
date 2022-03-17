@@ -76,8 +76,9 @@ class UAINetParser extends JavaTokenParsers{
             val potentialsInNet = pairs.
                map(pair => Potential(pair._1, pair._2, ValueStoreTypes.TABLE))
 
+
             // finally creates the Bayesian net
-            val net = new Bnet("UAIModel",
+            val net = Bnet("UAIModel",
                VariableSet(variables.values.toList), potentialsInNet)
 
             // return net

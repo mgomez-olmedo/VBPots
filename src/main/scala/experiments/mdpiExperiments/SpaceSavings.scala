@@ -2,7 +2,7 @@ package experiments.mdpiExperiments
 
 import bnet.Bnet
 import inference.VariableElimination
-import potential.{OperatorType, ValueDrivenStore, ValueStoreTypes}
+import potential.{OperatorType, Potential, ValueDrivenStore, ValueStoreTypes}
 
 object SpaceSavings extends App{
    // stores the names of the networks and variables of interest
@@ -12,7 +12,7 @@ object SpaceSavings extends App{
       ("munin.net", List("L_MED_ALLCV_EW")),
       ("pathfinder.net", List("F74", "F40")))
 
-   // for each pair net - variables consider sized for table, tree, pruned
+   // for each pair net - variables consider sizes for table, tree, pruned
    // tree, value driven with list of indices and index driven with pair of
    // arrays (values - (indices in potential, indices in array of values)
    // and value driven with maps
@@ -115,6 +115,10 @@ object SpaceSavings extends App{
       }
    }
 
+   /**
+    * gets info about making propagation with several thresholds for
+    * pruning
+    */
    def propagationInfo = {
       for (pair <- netsVariables){
          // creates the net
@@ -145,7 +149,27 @@ object SpaceSavings extends App{
 
                // computes KL distance between baseResult and altBaseResult
                val dist = baseResult.KLDistance(altBaseResult)
+               println("base result: ")
+               println(baseResult)
                println(" distance: " + dist)
+
+               // now considers each threshold
+               for(threshold <- thresholds){
+                  // makes a new net for the threshold changing the potential
+                  // of interest
+                  val store = convertedBnet.getPotentialForVariable(variable).store.asInstanceOf[ValueDrivenStore]
+                  val newStore = store.prune(threshold)
+                  val newNet = convertedBnet.changePotentialForVariable(variable, newStore)
+
+                  // makes a new engine
+                  val engine = new VariableElimination(newNet, false)
+                  engine.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)
+                  val result = engine.propagate(variable)
+
+                  // computes the distance with respect to baseResult
+                  val distAlt = baseResult.KLDistance(result)
+                  println("       " + threshold + " distance: " + distAlt)
+               }
             }
          }
       }

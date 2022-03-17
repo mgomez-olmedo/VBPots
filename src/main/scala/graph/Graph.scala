@@ -4,6 +4,7 @@ import base.Variable
 import bnet.Bnet
 
 import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
 
 /**
  * Class for representing a graph related to a Bayesian

@@ -1,9 +1,10 @@
 package parser
 
 import java.io.FileReader
-
 import base.VariableSet
 import bnet.Bnet
+
+import scala.collection.mutable.ListBuffer
 
 /**
  * Object offering a min method for testing the functionality

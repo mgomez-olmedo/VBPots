@@ -259,7 +259,7 @@ private def combinePotentials(variableToRemove : Variable, target : Variable) : 
       bnet.potentials.filter(potential => {
          //potential.isPotentialForParentVariable(variable)
          potential.mainVariable == variable
-      })
+      }).toList
    }
 
    /**
@@ -275,7 +275,7 @@ private def combinePotentials(variableToRemove : Variable, target : Variable) : 
       // as argument
       bnet.potentials.filter(potential => {
          potential.isPotentialForVariable(variable)
-      })
+      }).toList
    }
 
    /**

@@ -4,6 +4,7 @@ import base.{Variable, VariableSet}
 import bnet.Bnet
 import potential.{Potential, ValueStoreTypes}
 
+import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 /**
@@ -106,7 +107,7 @@ object UAIDirectParsing extends App{
     */
    def createPotentials(content: List[String]): Unit = {
       // initialize potentials list
-      potentials = List()
+      potentials = List[Potential]()
 
       // remove empty lines
       val newContent = content.filter(line => line.nonEmpty)
@@ -141,7 +142,7 @@ object UAIDirectParsing extends App{
       }).toList
 
       // add the new potential to the list of potentials
-      potentials = Potential(domains(index), values, ValueStoreTypes.TABLE) :: potentials
+      Potential(domains(index), values, ValueStoreTypes.TABLE) :: potentials
       println("   created potential with number of values: " + values.size)
 
       // return the number of lines to discard

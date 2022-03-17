@@ -277,7 +277,7 @@ class VariableElimination(val bnet : Bnet, val debugInfo: Boolean) {
       bnet.potentials.filter(potential => {
          //potential.isPotentialForParentVariable(variable)
          potential.mainVariable == variable
-      })
+      }).toList
    }
 
    /**
@@ -292,7 +292,7 @@ class VariableElimination(val bnet : Bnet, val debugInfo: Boolean) {
       // as argument
       bnet.potentials.filter(potential => {
          potential.isPotentialForVariable(variable)
-      })
+      }).toList
    }
 
    /**
