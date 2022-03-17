@@ -326,33 +326,6 @@ case class IDPMStore(variables: VariableSet,
          structuresSize
    }
 
-   // register available functions for marginalization
-   // and combination
-   registerCombinationFunction(OperatorType.DEFAULT,
-      IDPMStore.combineDefault)
-   registerCombinationFunction(OperatorType.ALT1,
-      IDPMStore.combineAlt1)
-   registerCombinationFunction(OperatorType.ALT2,
-      IDPMStore.combineAlt2)
-   registerCombinationFunction(OperatorType.ALT3,
-      IDPMStore.combineAlt3)
-   registerCombinationFunction(OperatorType.ALT4,
-      IDPMStore.combineAlt4)
-   registerCombinationFunction(OperatorType.ALT5,
-      IDPMStore.combineAlt5)
-   registerCombinationFunction(OperatorType.ALT6,
-      IDPMStore.combineAlt6)
-   registerCombinationFunction(OperatorType.ALT7,
-      IDPMStore.combineAlt7)
-   registerMarginalizationFunction(OperatorType.DEFAULT,
-      IDPMStore.marginalizeDefault)
-   registerMarginalizationFunction(OperatorType.ALT1,
-      IDPMStore.marginalizeAlt1)
-   registerMarginalizationFunction(OperatorType.ALT2,
-      IDPMStore.marginalizeAlt2)
-   registerMarginalizationFunction(OperatorType.ALT3,
-      IDPMStore.marginalizeAlt3)
-
    /**
     * merge two entries of the store producing a new one
     *
@@ -393,6 +366,34 @@ case class IDPMStore(variables: VariableSet,
       // return this
       this
    }
+
+   // register available functions for marginalization
+   // and combination
+   registerCombinationFunction(OperatorType.DEFAULT,
+      ValueStore.combineDefault)
+   registerCombinationFunction(OperatorType.ALT1,
+      IDPMStore.combineAlt1)
+   registerCombinationFunction(OperatorType.ALT2,
+      IDPMStore.combineAlt2)
+   registerCombinationFunction(OperatorType.ALT3,
+      IDPMStore.combineAlt3)
+   registerCombinationFunction(OperatorType.ALT4,
+      IDPMStore.combineAlt4)
+   registerCombinationFunction(OperatorType.ALT5,
+      IDPMStore.combineAlt5)
+   registerCombinationFunction(OperatorType.ALT6,
+      IDPMStore.combineAlt6)
+   registerCombinationFunction(OperatorType.ALT7,
+      IDPMStore.combineAlt7)
+   registerMarginalizationFunction(OperatorType.DEFAULT,
+      ValueStore.marginalizeDefault)
+   registerMarginalizationFunction(OperatorType.ALT1,
+      IDPMStore.marginalizeAlt1)
+   registerMarginalizationFunction(OperatorType.ALT2,
+      IDPMStore.marginalizeAlt2)
+   registerMarginalizationFunction(OperatorType.ALT3,
+      IDPMStore.marginalizeAlt3)
+
 }
 
 /** ********************************************************* */
@@ -485,37 +486,6 @@ object IDPMStore extends Combiner with Marginalizer {
              indices : ArrayBuffer[Long]) = {
       val pairs = ArrayBuffer(indices.map((_, 0L)).toArray : _*)
       new IDPMStore(variables, pairs, ArrayBuffer(value))
-   }
-
-   /**
-    * Combination method
-    *
-    * @param valst1 first potential to combine
-    * @param valst2 second potential to combine
-    * @return result of combination
-    */
-   override def combineDefault(valst1: ValueStore, valst2: ValueStore): ValueStore = {
-      // creates a mapper object
-      val mapper = CombineMapper(valst1.variables, valst2.variables)
-
-      // considers all the indexes of result and produces a list
-      // of pairs type (double - long) storing the values related
-      // to each index in result
-      val content = (0.toLong until mapper.resultDomain.possibleValues).
-         map(index => {
-            // produces the pair
-            val indexes: (Long, Long) = mapper.mapIndices2(index)
-            //println("index in result: " + index + " pairs of indexes: " + indexes)
-
-            // produces the value
-            Util.roundNumber(valst1.getValue(indexes._1) * valst2.getValue(indexes._2))
-      }).toArray
-
-      // creates the result
-      val result = IDPMStore(mapper.resultDomain, content)
-
-      // return result
-      result
    }
 
    /**
@@ -808,33 +778,6 @@ object IDPMStore extends Combiner with Marginalizer {
       // included (posterior call of addValueForRepresentation
       // made from addValue)
       pairs.foreach(pair => result.addValueForRepresentation(pair._1, pair._2))
-
-      // return result
-      result
-   }
-
-   /**
-    * Marginalization method
-    *
-    * @param valst    potential to marginalize
-    * @param variable variable to remove
-    * @return result of marginalization
-    */
-   override def marginalizeDefault(valst: ValueStore, variable: Variable): ValueStore = {
-      // creates a mapper object for this operation
-      val mapper = MarginalizeMapper(variable, valst.variables)
-
-      // for each index in result gets the corresponding
-      // values
-      val content: Array[Double] =
-         (0L until mapper.resultDomain.possibleValues).
-            map(index => {
-               Util.roundNumber(mapper.mapIndexFromResultToSource(index).
-                  map(valst.getValue).sum)
-            }).toArray
-
-      // creates the result as final step
-      val result = IDPMStore(mapper.resultDomain, content)
 
       // return result
       result

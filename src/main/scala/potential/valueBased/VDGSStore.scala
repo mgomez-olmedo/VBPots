@@ -279,13 +279,6 @@ case class VDGSStore(variables: VariableSet,
       map.values.map(grainSet => grainSet.getNumberGrains).sum
    }
 
-   // register available functions for marginalization
-   // and combination
-   registerCombinationFunction(OperatorType.DEFAULT,
-      VDGSStore.combineDefault)
-   registerMarginalizationFunction(OperatorType.DEFAULT,
-      VDGSStore.marginalizeDefault)
-
    /**
     * merge two entries of the store producing a new one
     *
@@ -311,6 +304,14 @@ case class VDGSStore(variables: VariableSet,
       // creates a new VDGLStore with the result
       new VDGSStore(variables, reduced + (newValue -> grains))
    }
+
+   // register available functions for marginalization
+   // and combination
+   registerCombinationFunction(OperatorType.DEFAULT,
+      ValueStore.combineDefault)
+   registerMarginalizationFunction(OperatorType.DEFAULT,
+      ValueStore.marginalizeDefault)
+
 }
 
 /**
@@ -430,30 +431,6 @@ object VDGSStore extends Combiner with Marginalizer{
 
       // produce the initial call to convertSequences
       convertSequences(indices, 0, TreeSet[Grain]())
-   }
-
-   /**
-    * Combination strategy
-    *
-    * @param valst1 first potential to combine
-    * @param valst2 second potential to combine
-    * @return result of combination
-    * @note TODO: to be implemented
-    */
-   override def combineDefault(valst1: ValueStore, valst2: ValueStore): ValueStore = {
-      null
-   }
-
-   /**
-    * Marginalization strategy
-    *
-    * @param valst    potential to marginalize
-    * @param variable variable to remove
-    * @return result of marginalization
-    * @note TODO: to be implemented
-    */
-   override def marginalizeDefault(valst: ValueStore, variable: Variable): ValueStore = {
-      null
    }
 }
 

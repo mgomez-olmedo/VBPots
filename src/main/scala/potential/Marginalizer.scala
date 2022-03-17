@@ -1,8 +1,10 @@
 package potential
 
 import base.Variable
+import mapper.MarginalizeMapper
 import potential.Operations.Marginalization
 import potential.OperatorType.OperatorType
+import utils.Util
 
 import scala.collection.mutable
 
@@ -49,16 +51,30 @@ trait Marginalizer {
    }
 
    /**
-    * default function with empty implementation
-    * @param valst1 potential to marginalize
-    * @param variable target variable
-    * @return operation result
+    * Marginalization method
+    *
+    * @param valst    potential to marginalize
+    * @param variable variable to remove
+    * @return result of marginalization
     */
-   def marginalizeDefault(valst1 : ValueStore, variable : Variable) : ValueStore = {
-      println(s"marginalization method ${OperatorType.DEFAULT} - Marginalizer trait")
+   def marginalizeDefault(valst: ValueStore, variable: Variable): ValueStore = {
+      // creates a mapper object for this operation
+      val mapper = MarginalizeMapper(variable, valst.variables)
 
-      // shows an error message and return null
-      println("This function should never be executed")
-      null
+      // for each index in result gets the corresponding
+      // values
+      val content: Array[Double] =
+      (0L until mapper.resultDomain.possibleValues).
+         map(index => {
+            Util.roundNumber(mapper.mapIndexFromResultToSource(index).
+               map(valst.getValue).sum)
+         }).toArray
+
+      // creates the result as final step
+      val result = ValueStore.createStore(valst.kind, mapper.resultDomain, content)
+
+      // return result
+      result
    }
+
 }

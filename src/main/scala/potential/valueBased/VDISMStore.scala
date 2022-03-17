@@ -229,27 +229,6 @@ case class VDISMStore(variables: VariableSet,
       variablesSizes + mapSizes + indicesSizes + structuresSize
    }
 
-   // register available functions for marginalization
-   // and combination
-   registerCombinationFunction(OperatorType.DEFAULT,
-      VDISMStore.combineDefault)
-   registerCombinationFunction(OperatorType.ALT1,
-      VDISMStore.combineAlt1)
-   registerCombinationFunction(OperatorType.ALT2,
-      VDISMStore.combineAlt2)
-   registerCombinationFunction(OperatorType.ALT3,
-      VDISMStore.combineAlt3)
-   registerCombinationFunction(OperatorType.ALT4,
-      VDISMStore.combineAlt4)
-   registerCombinationFunction(OperatorType.ALT5,
-      VDISMStore.combineAlt5)
-   registerMarginalizationFunction(OperatorType.DEFAULT,
-      VDISMStore.marginalizeDefault)
-   registerMarginalizationFunction(OperatorType.ALT1,
-      VDISMStore.marginalizeAlt1)
-   registerMarginalizationFunction(OperatorType.ALT2,
-      VDISMStore.marginalizeAlt2)
-
    /**
     * merge two entries of the store producing a new one
     *
@@ -279,6 +258,27 @@ case class VDISMStore(variables: VariableSet,
       // return this
       this
    }
+
+   // register available functions for marginalization
+   // and combination
+   registerCombinationFunction(OperatorType.DEFAULT,
+      ValueStore.combineDefault)
+   registerCombinationFunction(OperatorType.ALT1,
+      VDISMStore.combineAlt1)
+   registerCombinationFunction(OperatorType.ALT2,
+      VDISMStore.combineAlt2)
+   registerCombinationFunction(OperatorType.ALT3,
+      VDISMStore.combineAlt3)
+   registerCombinationFunction(OperatorType.ALT4,
+      VDISMStore.combineAlt4)
+   registerCombinationFunction(OperatorType.ALT5,
+      VDISMStore.combineAlt5)
+   registerMarginalizationFunction(OperatorType.DEFAULT,
+      ValueStore.marginalizeDefault)
+   registerMarginalizationFunction(OperatorType.ALT1,
+      VDISMStore.marginalizeAlt1)
+   registerMarginalizationFunction(OperatorType.ALT2,
+      VDISMStore.marginalizeAlt2)
 }
 
 /**
@@ -376,44 +376,6 @@ object VDISMStore extends Combiner with Marginalizer{
     */
    def apply(variables : VariableSet, value : Double, indices : Set[Long]): VDISMStore = {
       new VDISMStore(variables, mutable.Map(value -> indices))
-   }
-
-   /**
-    * Combination method
-    *
-    * @param valst1 first potential to combine
-    * @param valst2 second potential to combine
-    * @return result of combination
-    */
-   override def combineDefault(valst1: ValueStore, valst2: ValueStore): ValueStore = {
-      // creates a mapper object
-      val mapper = CombineMapper(valst1.variables, valst2.variables)
-
-      // considers all the indexes of result and produces a list
-      // of pairs type (double - long) storing the values related
-      // to each index in result
-      val pairs = (0.toLong until mapper.resultDomain.possibleValues).
-         map(index => {
-            // produces the pair
-            val indexes: (Long, Long) = mapper.mapIndices(index)
-
-            // produces the pair
-            (Util.roundNumber(valst1.getValue(indexes._1) * valst2.getValue(indexes._2)), index)
-         }).toList
-
-      // creates the result
-      val result = VDISMStore(mapper.resultDomain)
-
-      // adds all the pairs: addValue is required to discard
-      // default value (addValue) and if the value is already
-      // included (posterior call of addValueForRepresentation
-      // made from addValue)
-      pairs.foreach(pair => {
-         result.addValue(pair._1, pair._2)
-      })
-
-      // return result
-      result
    }
 
    /**
@@ -611,35 +573,6 @@ object VDISMStore extends Combiner with Marginalizer{
       val result = VDISMStore(mapper.resultDomain, mutableMap)
 
       // finally return result
-      result
-   }
-
-   /**
-    * Marginalization method
-    *
-    * @param valst    potential to marginalize
-    * @param variable variable to remove
-    * @return result of marginalization
-    * @note TODO: to be implemented
-    */
-   override def marginalizeDefault(valst: ValueStore, variable: Variable): ValueStore = {
-      // creates a mapper object for this operation
-      val mapper = MarginalizeMapper(variable, valst.variables)
-
-      // for each index in result gets the corresponding
-      // values
-      val content: Array[Double] =
-      (0L until mapper.resultDomain.possibleValues).
-         map(index => {
-            val value = mapper.mapIndexFromResultToSource(index).
-               map(valst.getValue).sum
-            Util.roundNumber(value)
-         }).toArray
-
-      // creates the result as final step
-      val result = VDISMStore(mapper.resultDomain, content)
-
-      // return result
       result
    }
 

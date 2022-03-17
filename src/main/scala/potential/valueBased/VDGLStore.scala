@@ -361,9 +361,9 @@ case class VDGLStore(variables: VariableSet,
    // register available functions for marginalization
    // and combination
    registerCombinationFunction(OperatorType.DEFAULT,
-      VDGLStore.super.combineDefault)
+      ValueStore.combineDefault)
    registerMarginalizationFunction(OperatorType.DEFAULT,
-      VDGLStore.super.marginalizeDefault)
+      ValueStore.marginalizeDefault)
 }
 
 /**
@@ -481,29 +481,6 @@ object VDGLStore extends Combiner with Marginalizer {
 
       // produce the initial call to convertSequences
       convertSequences(indices, 0, List[Grain]())
-   }
-
-   /**
-    * Combination strategy
-    *
-    * @param valst1 first potential to combine
-    * @param valst2 second potential to combine
-    * @return result of combination
-    */
-   override def combineDefault(valst1: ValueStore, valst2: ValueStore): ValueStore = {
-      null
-   }
-
-   /**
-    * Marginalization strategy
-    *
-    * @param valst    potential to marginalize
-    * @param variable variable to remove
-    * @return result of marginalization
-    * @note TODO: to be implemented
-    */
-   override def marginalizeDefault(valst: ValueStore, variable: Variable): ValueStore = {
-      null
    }
 }
 

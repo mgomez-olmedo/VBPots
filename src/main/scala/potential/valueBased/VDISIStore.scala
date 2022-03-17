@@ -234,9 +234,9 @@ case class VDISIStore(variables: VariableSet,
    // register available functions for marginalization
    // and combination
    registerCombinationFunction(OperatorType.DEFAULT,
-      VDISIStore.combineDefault)
+      ValueStore.combineDefault)
    registerMarginalizationFunction(OperatorType.DEFAULT,
-      VDISIStore.marginalizeDefault)
+      ValueStore.marginalizeDefault)
 
    /**
     * merge two entries of the store producing a new one
@@ -334,30 +334,6 @@ object VDISIStore extends Combiner with Marginalizer{
     */
    def apply(variables : VariableSet, value : Double, indices : Set[Long]): VDISIStore = {
       new VDISIStore(variables, Map(value -> indices))
-   }
-
-   /**
-    * Combination strategy
-    *
-    * @param valst1 first potential to combine
-    * @param valst2 second potential to combine
-    * @return result of combination
-    * @note TODO: to be implemented
-    */
-   override def combineDefault(valst1: ValueStore, valst2: ValueStore): ValueStore = {
-      null
-   }
-
-   /**
-    * Marginalization strategy
-    *
-    * @param valst    potential to marginalize
-    * @param variable variable to remove
-    * @return result of marginalization
-    * @note TODO: to be implemented
-    */
-   override def marginalizeDefault(valst: ValueStore, variable: Variable): ValueStore = {
-      null
    }
 }
 

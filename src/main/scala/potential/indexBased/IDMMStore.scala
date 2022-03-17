@@ -299,37 +299,6 @@ case class IDMMStore(variables: VariableSet,
          structuresSize
    }
 
-   // register available functions for marginalization
-   // and combination
-   registerCombinationFunction(OperatorType.DEFAULT,
-      IDMMStore.combineDefault)
-   registerCombinationFunction(OperatorType.ALT1,
-      IDMMStore.combineAlt1)
-   registerCombinationFunction(OperatorType.ALT2,
-      IDMMStore.combineAlt2)
-   registerCombinationFunction(OperatorType.ALT3,
-      IDMMStore.combineAlt3)
-   registerCombinationFunction(OperatorType.ALT4,
-      IDMMStore.combineAlt4)
-   registerCombinationFunction(OperatorType.ALT5,
-      IDMMStore.combineAlt5)
-   registerCombinationFunction(OperatorType.ALT6,
-      IDMMStore.combineAlt6)
-   registerCombinationFunction(OperatorType.ALT7,
-      IDMMStore.combineAlt7)
-   registerCombinationFunction(OperatorType.ALT8,
-      IDMMStore.combineAlt8)
-   registerMarginalizationFunction(OperatorType.DEFAULT,
-      IDMMStore.marginalizeDefault)
-   registerMarginalizationFunction(OperatorType.ALT1,
-      IDMMStore.marginalizeAlt1)
-   registerMarginalizationFunction(OperatorType.ALT2,
-      IDMMStore.marginalizeAlt2)
-   registerMarginalizationFunction(OperatorType.ALT3,
-      IDMMStore.marginalizeAlt3)
-   registerMarginalizationFunction(OperatorType.ALT4,
-      IDMMStore.marginalizeAlt4)
-
    /**
     * merge two entries of the store producing a new one
     *
@@ -372,6 +341,38 @@ case class IDMMStore(variables: VariableSet,
       // return this
       this
    }
+
+   // register available functions for marginalization
+   // and combination
+   registerCombinationFunction(OperatorType.DEFAULT,
+      ValueStore.combineDefault)
+   registerCombinationFunction(OperatorType.ALT1,
+      IDMMStore.combineAlt1)
+   registerCombinationFunction(OperatorType.ALT2,
+      IDMMStore.combineAlt2)
+   registerCombinationFunction(OperatorType.ALT3,
+      IDMMStore.combineAlt3)
+   registerCombinationFunction(OperatorType.ALT4,
+      IDMMStore.combineAlt4)
+   registerCombinationFunction(OperatorType.ALT5,
+      IDMMStore.combineAlt5)
+   registerCombinationFunction(OperatorType.ALT6,
+      IDMMStore.combineAlt6)
+   registerCombinationFunction(OperatorType.ALT7,
+      IDMMStore.combineAlt7)
+   registerCombinationFunction(OperatorType.ALT8,
+      IDMMStore.combineAlt8)
+   registerMarginalizationFunction(OperatorType.DEFAULT,
+      ValueStore.marginalizeDefault)
+   registerMarginalizationFunction(OperatorType.ALT1,
+      IDMMStore.marginalizeAlt1)
+   registerMarginalizationFunction(OperatorType.ALT2,
+      IDMMStore.marginalizeAlt2)
+   registerMarginalizationFunction(OperatorType.ALT3,
+      IDMMStore.marginalizeAlt3)
+   registerMarginalizationFunction(OperatorType.ALT4,
+      IDMMStore.marginalizeAlt4)
+
 }
 
 /** ********************************************************* */
@@ -459,43 +460,6 @@ object IDMMStore extends Combiner with Marginalizer {
       val map = mutable.Map[Long, Long]()
       indices.foreach(index => map += (index -> 0L))
       new IDMMStore(variables, map, ArrayBuffer(value))
-   }
-
-   /**
-    * Combination method
-    *
-    * @param valst1 first potential to combine
-    * @param valst2 second potential to combine
-    * @return result of combination
-    */
-   override def combineDefault(valst1: ValueStore, valst2: ValueStore): ValueStore = {
-      // creates a mapper object
-      val mapper = CombineMapper(valst1.variables, valst2.variables)
-      println("IDMMStore combine with default option.....")
-      println(valst1)
-      println(valst2)
-
-      // considers all the indexes of result and produces a list
-      // of pairs type (double - long) storing the values related
-      // to each index in result
-      val content = (0.toLong until mapper.resultDomain.possibleValues).
-         map(index => {
-            // produces the pair
-            val indexes: (Long, Long) = mapper.mapIndices2(index)
-            //println("index in result: " + index + " pairs of indexes: " + indexes)
-
-            // produces the value
-            Util.roundNumber(valst1.getValue(indexes._1) * valst2.getValue(indexes._2))
-         }).toArray
-
-      // creates the result
-      val result = IDMMStore(mapper.resultDomain, content)
-      println("result of combination..............")
-      println(result)
-      println("------------------------------------")
-
-      // return result
-      result
    }
 
    /**
@@ -832,33 +796,6 @@ object IDMMStore extends Combiner with Marginalizer {
          // increments index
          index+=1
       }
-
-      // return result
-      result
-   }
-
-   /**
-    * Marginalization method
-    *
-    * @param valst    potential to marginalize
-    * @param variable variable to remove
-    * @return result of marginalization
-    */
-   override def marginalizeDefault(valst: ValueStore, variable: Variable): ValueStore = {
-      // creates a mapper object for this operation
-      val mapper = MarginalizeMapper(variable, valst.variables)
-
-      // for each index in result gets the corresponding
-      // values
-      val content: Array[Double] =
-      (0L until mapper.resultDomain.possibleValues).
-         map(index => {
-            Util.roundNumber(mapper.mapIndexFromResultToSource(index).
-               map(valst.getValue).sum)
-         }).toArray
-
-      // creates the result as final step
-      val result = IDMMStore(mapper.resultDomain, content)
 
       // return result
       result

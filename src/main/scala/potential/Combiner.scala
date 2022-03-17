@@ -1,7 +1,9 @@
 package potential
 
+import mapper.CombineMapper
 import potential.Operations.Combination
 import potential.OperatorType.OperatorType
+import utils.Util
 
 import scala.collection.mutable
 
@@ -49,16 +51,34 @@ trait Combiner {
    }
 
    /**
-    * default implementation
-    * @param valst1 first operator
-    * @param valst2 second operator
+    * Combination method
+    *
+    * @param valst1 first potential to combine
+    * @param valst2 second potential to combine
     * @return result of combination
     */
-   def combineDefault(valst1 : ValueStore, valst2 : ValueStore) : ValueStore = {
-      println(s"combine alternative ${OperatorType.DEFAULT} - Combiner trait")
+   def combineDefault(valst1: ValueStore, valst2: ValueStore): ValueStore = {
+      // creates a mapper object
+      val mapper = CombineMapper(valst1.variables, valst2.variables)
 
-      // shows an error message and return null
-      println("This function should never be executed")
-      null
+      // considers all the indexes of result and produces a list
+      // of pairs type (double - long) storing the values related
+      // to each index in result
+      val content = (0.toLong until mapper.resultDomain.possibleValues).
+         map(index => {
+            // produces the pair
+            val indexes: (Long, Long) = mapper.mapIndices2(index)
+            //println("index in result: " + index + " pairs of indexes: " + indexes)
+
+            // produces the value
+            Util.roundNumber(valst1.getValue(indexes._1) * valst2.getValue(indexes._2))
+         }).toArray
+
+      // creates the result
+      val result = ValueStore.createStore(valst1.kind, mapper.resultDomain, content)
+
+      // return result
+      result
    }
+
 }

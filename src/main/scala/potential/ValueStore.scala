@@ -3,6 +3,7 @@ package potential
 import base.{Configuration, Variable, VariableSet}
 import mapper.CombineMapper
 import potential.OperatorType.OperatorType
+import potential.ValueStoreTypes.ValueStoreType
 import potential.indexBased.{IDMMStore, IDPIStore, IDPMStore, IDSIStore, IDSMStore}
 import potential.valueBased.{VDGLStore, VDGSStore, VDILIStore, VDILMStore, VDISIStore, VDISMStore}
 import utils._
@@ -235,7 +236,7 @@ trait ValueStore extends Combiner with Marginalizer with Serializable {
  * companion object of trait in order to store global methods
  * and configuration values
  */
-object ValueStore extends Combiner{
+object ValueStore extends Combiner with Marginalizer{
    /**
     * type of combination to use
     */
@@ -254,20 +255,6 @@ object ValueStore extends Combiner{
     */
    def createStore(store : ValueStore, values: List[Double]): ValueStore = {
       // creates the corresponding store
-      /*val result = store match {
-         case TableStore(vars, _) => TableStore(vars, values.toArray)
-         case TreeStore(vars, _) => TreeStore(vars, values.toArray)
-         case ArrayIMStore(vars, _ , _) => ArrayIMStore(vars, values.toArray)
-         case ArrayIIStore(vars, _, _) => ArrayIIStore(vars, values.toArray)
-         case MapSGStore(vars, _) => MapSGStore(vars, values.toArray)
-         case MapLGStore(vars, _) => MapLGStore(vars, values.toArray)
-         case MapLIIStore(vars, _) => MapLIIStore(vars, values.toArray)
-         case MapLIMStore(vars, _) => MapLIMStore(vars, values.toArray)
-         case MapSIMStore(vars, _) => MapSIMStore(vars, values.toArray)
-         case ArraySIIStore(vars, _, _) => ArraySIIStore(vars, values.toArray)
-         case ArraySIMStore(vars, _, _) => ArraySIMStore(vars, values.toArray)
-         case MapIMStore(vars, _, _) => MapIMStore(vars, values.toArray)
-      }*/
       val vars = store.variables
       val result = store.kind match {
          case ValueStoreTypes.TABLE => TableStore(vars, values.toArray)
@@ -284,6 +271,35 @@ object ValueStore extends Combiner{
          case ValueStoreTypes.IDSISTORE => IDSIStore(vars, values.toArray)
          case ValueStoreTypes.IDSMSTORE => IDSMStore(vars, values.toArray)
          case ValueStoreTypes.IDMMSTORE => IDMMStore(vars, values.toArray)
+      }
+
+      // return result
+      result
+   }
+
+   /**
+    * Creates a store of the same type as this (one)
+    *
+    * @param values list of values for the store
+    * @return
+    */
+   def createStore(kind : ValueStoreType, variables : VariableSet, values: Array[Double]): ValueStore = {
+      // creates the corresponding store
+      val result = kind match {
+         case ValueStoreTypes.TABLE => TableStore(variables, values)
+         case ValueStoreTypes.TREE => TreeStore(variables, values)
+         case ValueStoreTypes.PRUNEDTREE => PrunedTreeStore(variables, values)
+         case ValueStoreTypes.IDPISTORE => IDPMStore(variables, values)
+         case ValueStoreTypes.IDPMSTORE => IDPIStore(variables, values)
+         case ValueStoreTypes.VDGSSTORE => VDGSStore(variables, values)
+         case ValueStoreTypes.VDGLSTORE => VDGLStore(variables, values)
+         case ValueStoreTypes.VDILISTORE => VDILIStore(variables, values)
+         case ValueStoreTypes.VDILMSTORE => VDILMStore(variables, values)
+         case ValueStoreTypes.VDISISTORE => VDISIStore(variables, values)
+         case ValueStoreTypes.VDISMSTORE => VDISMStore(variables, values)
+         case ValueStoreTypes.IDSISTORE => IDSIStore(variables, values)
+         case ValueStoreTypes.IDSMSTORE => IDSMStore(variables, values)
+         case ValueStoreTypes.IDMMSTORE => IDMMStore(variables, values)
       }
 
       // return result

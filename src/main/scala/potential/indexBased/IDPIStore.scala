@@ -280,13 +280,6 @@ case class IDPIStore(variables: VariableSet,
                   structuresSize
    }
 
-   // register available functions for marginalization
-   // and combination
-   registerCombinationFunction(OperatorType.DEFAULT,
-      IDPIStore.combineDefault)
-   registerMarginalizationFunction(OperatorType.DEFAULT,
-      IDPIStore.marginalizeDefault)
-
    /**
     * merge two entries of the store producing a new one
     *
@@ -322,6 +315,13 @@ case class IDPIStore(variables: VariableSet,
       // creates a new object
       new IDPIStore(variables, newIndices, newValues.toArray)
    }
+
+   // register available functions for marginalization
+   // and combination
+   registerCombinationFunction(OperatorType.DEFAULT,
+      ValueStore.combineDefault)
+   registerMarginalizationFunction(OperatorType.DEFAULT,
+      ValueStore.marginalizeDefault)
 }
 
 /**
@@ -399,34 +399,6 @@ object IDPIStore extends Combiner with Marginalizer {
    def apply(variables : VariableSet, value : Double, indices : Array[Long]): IDPIStore = {
       new IDPIStore(variables, indices.map(index => (index, 0L)).toArray,
          Array(value))
-   }
-
-   /**
-    * Combination method
-    *
-    * @param valst1 first potential to combine
-    * @param valst2 second potential to combine
-    * @return result of combination
-    *         TODO: method to be implemented. We
-    *         must consider different alternatives
-    */
-   override def combineDefault(valst1: ValueStore, valst2: ValueStore):
-                                                ValueStore = {
-      null
-   }
-
-   /**
-    * Marginalization method
-    *
-    * @param valst    potential to marginalize
-    * @param variable variable to remove
-    * @return result of marginalization
-    *         TODO: method to be implemented. We
-    *         *         must consider different alternatives
-    */
-   override def marginalizeDefault(valst: ValueStore, variable: Variable):
-                                             ValueStore = {
-      null
    }
 }
 

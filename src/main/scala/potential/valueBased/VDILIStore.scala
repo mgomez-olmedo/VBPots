@@ -1,6 +1,7 @@
 package potential.valueBased
 
 import base.{Variable, VariableSet}
+import mapper.{CombineMapper, MarginalizeMapper}
 import potential.{ValueStoreTypes, _}
 import utils.{DataSizes, Util}
 
@@ -12,12 +13,13 @@ import scala.collection.immutable.HashMap
  * - key: each one of the different values
  * - value: immutable list of indices where the value is
  * stored
+ *
  * @param variables domain of potential
- * @param map dictionary with all the information
+ * @param map       dictionary with all the information
  */
 case class VDILIStore(variables: VariableSet,
                       map: Map[Double, List[Long]])
-                       extends ValueDrivenStore with Combiner with Marginalizer {
+   extends ValueDrivenStore with Combiner with Marginalizer {
    /**
     * default value strategy
     */
@@ -55,7 +57,7 @@ case class VDILIStore(variables: VariableSet,
     */
    def addValueForRepresentation(value: Double, index: Long): VDILIStore = {
       val indicesForValue: List[Long] =
-            map.getOrElse(value, null)
+         map.getOrElse(value, null)
       val res = if (indicesForValue != null) {
          map + (value -> (index :: indicesForValue))
       }
@@ -66,7 +68,7 @@ case class VDILIStore(variables: VariableSet,
       // creates a copy of the object (it can be used just
       // because only one data member changes)
       val result =
-         VDILIStore(variables, res.keys.toArray)
+      VDILIStore(variables, res.keys.toArray)
 
       // return result
       result
@@ -75,7 +77,8 @@ case class VDILIStore(variables: VariableSet,
    /**
     * produces a collection of stores: one for each
     * value
-    *  @return
+    *
+    * @return
     */
    override def split: List[ValueStore] = {
       map.keySet.map(value => {
@@ -190,7 +193,7 @@ case class VDILIStore(variables: VariableSet,
 
       // determine the number of indices
       val numberIndices =
-            map.map(entry => entry._2.length).sum
+         map.map(entry => entry._2.length).sum
 
       // return the tuple with possible values, number
       // of indices stored in the potential, number of
@@ -235,7 +238,7 @@ case class VDILIStore(variables: VariableSet,
       // gets sizes due to the map; adds one due to
       // default value
       val mapSizes =
-         map.size * DataSizes.DOUBLE + DataSizes.DOUBLE
+      map.size * DataSizes.DOUBLE + DataSizes.DOUBLE
 
       // gets sizes due to indices
       val indicesSizes =
@@ -281,6 +284,10 @@ case class VDILIStore(variables: VariableSet,
       // creates a new VDILIStore with the result
       new VDILIStore(variables, reduced + (newValue -> indices))
    }
+
+   // register functions for marginalization and combination
+   registerCombinationFunction(OperatorType.DEFAULT, ValueStore.combineDefault)
+   registerMarginalizationFunction(OperatorType.DEFAULT, ValueStore.marginalizeDefault)
 }
 
 /**
@@ -290,7 +297,7 @@ object VDILIStore extends Combiner with Marginalizer {
    var getValueCalls = 0
 
    def addGetValueCalls = {
-      getValueCalls+=1
+      getValueCalls += 1
    }
 
    def getGetValueCalls = getValueCalls
@@ -299,7 +306,7 @@ object VDILIStore extends Combiner with Marginalizer {
     * Factory method
     *
     * @param variables potential domain
-    * @param values values to store
+    * @param values    values to store
     * @return
     */
    def apply(variables: VariableSet, values: Array[Double]): VDILIStore = {
@@ -342,37 +349,14 @@ object VDILIStore extends Combiner with Marginalizer {
 
    /**
     * creates a new store for a values and its indexes
+    *
     * @param variables target variables
-    * @param value value to store
-    * @param indices indexed with value assigned
+    * @param value     value to store
+    * @param indices   indexed with value assigned
     * @return
     */
-   def apply(variables : VariableSet, value : Double, indices : List[Long]) = {
+   def apply(variables: VariableSet, value: Double, indices: List[Long]) = {
       new VDILIStore(variables, HashMap(value -> indices))
-   }
-
-   /**
-    * Combination method
-    *
-    * @param valst1 first potential to combine
-    * @param valst2 second potential to combine
-    * @return result of combination
-    * @note TODO: to be implemented
-    */
-   override def combineDefault(valst1: ValueStore, valst2: ValueStore): ValueStore = {
-      null
-   }
-
-   /**
-    * Marginalization method
-    *
-    * @param valst    potential to marginalize
-    * @param variable variable to remove
-    * @return result of marginalization
-    * @note TODO: to be implemented
-    */
-   override def marginalizeDefault(valst: ValueStore, variable: Variable): ValueStore = {
-      null
    }
 }
 

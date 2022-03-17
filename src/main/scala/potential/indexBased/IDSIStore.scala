@@ -317,6 +317,12 @@ case class IDSIStore(variables: VariableSet,
       // return a new object
       return new IDSIStore(variables, newArraySets.toArray, newValues.toArray)
    }
+
+   // register combination and marginalization functions
+   registerCombinationFunction(OperatorType.DEFAULT,
+      ValueStore.combineDefault)
+   registerMarginalizationFunction(OperatorType.DEFAULT,
+      ValueStore.marginalizeDefault)
 }
 
 /**
@@ -387,32 +393,6 @@ object IDSIStore extends Combiner with Marginalizer {
    def apply(variables : VariableSet, value : Double,
              indices : Set[Long]) = {
       new IDSIStore(variables, Array(indices), Array(value))
-   }
-
-   /**
-    * Combination method
-    *
-    * @param valst1 first potential to combine
-    * @param valst2 second potential to combine
-    * @return result of combination
-    * @note  TODO: method to be implemented. Different
-    *        alternatives should be tested
-    */
-   override def combineDefault(valst1: ValueStore, valst2: ValueStore): ValueStore = {
-      null
-   }
-
-   /**
-    * Marginalization method
-    *
-    * @param valst    potential to marginalize
-    * @param variable variable to remove
-    * @return result of marginalization
-    * @note  TODO: method to be implemented. Different
-    *        alternatives should be tested
-    */
-   override def marginalizeDefault(valst: ValueStore, variable: Variable): ValueStore = {
-      null
    }
 }
 
