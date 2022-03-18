@@ -2,7 +2,10 @@ package experiments.mdpiExperiments
 
 import bnet.Bnet
 import inference.VariableElimination
+import potential.ValueStoreTypes.ValueStoreType
 import potential.{OperatorType, Potential, ValueDrivenStore, ValueStoreTypes}
+
+import scala.collection.mutable
 
 object SpaceSavings extends App{
    // stores the names of the networks and variables of interest
@@ -87,30 +90,45 @@ object SpaceSavings extends App{
 
             // shows the header for each alternative and sizes of
             // base representation and thresholds of pruning
-            printf("      alternative     base-size ")
-            thresholds.foreach(threshold => printf("%10.5f", threshold))
-            println()
+            alternativesWithPrune.foreach(alternative => printf("%10s", alternative))
+            println
 
-            // now perform pruning operations for each alternative
-            for (alternative <- alternativesWithPrune){
+            // store bases sizes for each representation
+            val baseSizes = mutable.Map[ValueStoreType, Long]()
+
+            // first at all considers the version without pruning
+            for(alternative <- alternativesWithPrune){
                // makes the conversion
                val potentialConverted  = potential.convert(alternative)
                val store = potentialConverted.store.asInstanceOf[ValueDrivenStore]
 
                // gets the base size for the potential
                val baseSize = potentialConverted.store.getMemorySize
-               printf("%15s %10d ", alternative, baseSize)
+               baseSizes += (alternative -> baseSize)
+               printf("%10d ", baseSize)
+            }
+            println
 
-               // and considers each threshold
-               for (threshold <- thresholds) {
+            // no consider each threshold
+            for(threshold <- thresholds){
+               // shows info about the threshold
+               printf("%8.5f ", threshold)
+
+               // now consider the alternatives with pruning capabilities
+               for(alternative <- alternativesWithPrune){
+                  // makes the conversion
+                  val potentialConverted  = potential.convert(alternative)
+                  val store = potentialConverted.store.asInstanceOf[ValueDrivenStore]
+
+                  // makes the prune
                   val storePruned = store.prune(threshold)
                   val prunedSize = storePruned.getMemorySize
-                  val savings = (prunedSize*100*1.0)/baseSize - 100
+                  val savings = (prunedSize*100.0)/baseSizes(alternative) - 100
                   printf("%10.4f ", savings)
                }
-               println()
+               println
             }
-            println()
+            println
          }
       }
    }
@@ -123,6 +141,8 @@ object SpaceSavings extends App{
       for (pair <- netsVariables){
          // creates the net
          val bnet = Bnet(pair._1)
+         print("net    variable")
+         println
 
          // makes a variable elimination engine
          val engine = new VariableElimination(bnet, false)
@@ -132,31 +152,31 @@ object SpaceSavings extends App{
 
          // considers each variable
          for (variable <- pair._2){
+            // shows info about net and variable
+            printf("%15s %15s ", pair._1, variable)
+            println
+
             // gets the base result without pruning
             val baseResult = engine.propagate(variable)
 
-            // considers each representation with prune capabilities
+            // shows information about alternatives
             for(alternative <- alternativesWithPrune){
-               print("alternative: " + alternative + "  ")
-               // make the conversion of the net
-               val convertedBnet = Bnet.convert(bnet, alternative)
+               printf("%15s ", alternative)
+            }
+            println
 
-               // makes the propagation with converted just for checking
-               // results are coincident with base result
-               val engineAlternative = new VariableElimination(convertedBnet, false)
-               engineAlternative.setFunctions(OperatorType.DEFAULT, OperatorType.DEFAULT)
-               val altBaseResult = engineAlternative.propagate(variable)
+            // considers each threshold
+            for(threshold <- thresholds){
+               // shows info about the threshold
+               printf("%8.5f ", threshold)
 
-               // computes KL distance between baseResult and altBaseResult
-               val dist = baseResult.KLDistance(altBaseResult)
-               println("base result: ")
-               println(baseResult)
-               println(" distance: " + dist)
+               // considers each alternative
+               for(alternative <- alternativesWithPrune){
+                  // make the conversion of the net
+                  val convertedBnet = Bnet.convert(bnet, alternative)
 
-               // now considers each threshold
-               for(threshold <- thresholds){
-                  // makes a new net for the threshold changing the potential
-                  // of interest
+                  // gets the potential of interest and perform the
+                  // prune
                   val store = convertedBnet.getPotentialForVariable(variable).store.asInstanceOf[ValueDrivenStore]
                   val newStore = store.prune(threshold)
                   val newNet = convertedBnet.changePotentialForVariable(variable, newStore)
@@ -167,18 +187,23 @@ object SpaceSavings extends App{
                   val result = engine.propagate(variable)
 
                   // computes the distance with respect to baseResult
-                  val distAlt = baseResult.KLDistance(result)
-                  println("       " + threshold + " distance: " + distAlt)
+                  val distance = baseResult.KLDistance(result)
+
+                  // shows info about the distance
+                  printf("%8.5f ", distance)
                }
+               println
             }
+            println
          }
       }
    }
 
    // call methods for producing results
-   //generalInfo
+   generalInfo
    println("=====================================")
-   //pruneInfo
+   pruneInfo
    println("=====================================")
    propagationInfo
+   println("=====================================")
 }

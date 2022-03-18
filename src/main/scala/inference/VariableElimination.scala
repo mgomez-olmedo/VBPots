@@ -70,7 +70,6 @@ class VariableElimination(val bnet : Bnet, val debugInfo: Boolean) {
     * @return computed posterior for target variable
     */
    def propagate(variableName: String): Potential = {
-      println("inference.VariableElimination::propagate: propagation for: " + variableName)
       // gets the variable
       val variable = bnet.variables.getVariable(variableName)
 
